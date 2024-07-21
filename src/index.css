@@ -1,0 +1,31 @@
+/* src/index.css */
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities; */
+*{
+    font-family: 'Exensa-Regular';
+}
+
+@font-face {
+    font-family: 'Exensa-Bold';
+    src: url('https://ik.imagekit.io/026k2i7ys/fonts/ExensaGrotesk-Bold.woff2?updatedAt=1721482158648') format('woff2');
+    font-weight: bold;
+}
+
+@font-face {
+    font-family: 'Exensa-Regular';
+    src: url('https://ik.imagekit.io/026k2i7ys/fonts/ExensaGrotesk-Regular.woff2?updatedAt=1721482158663') format('woff2');
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: 'Exensa-Extrabold';
+    src: url('https://ik.imagekit.io/026k2i7ys/fonts/ExensaGrotesk-ExtraBold.woff2?updatedAt=1721482158665') format('woff2');
+    font-weight: bolder;
+}
+
+@font-face {
+    font-family: 'Exensa-Light';
+    src: url('https://ik.imagekit.io/026k2i7ys/fonts/ExensaGrotesk-Light.woff2?updatedAt=1721482158525') format('woff2');
+    font-weight: 100;
+}
