@@ -1,5 +1,5 @@
 // src/components/Navbar.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -11,6 +11,7 @@ import { styled, alpha } from '@mui/material/styles';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useTheme } from '../ThemeContext';
+import ProfileModal from './ProfileModal';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -41,40 +42,56 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     color: 'inherit',
     '& .MuiInputBase-input': {
         padding: theme.spacing(1, 1, 1, 0),
+        // vertical padding + font size from searchIcon
         paddingLeft: `calc(1em + ${theme.spacing(4)})`,
         transition: theme.transitions.create('width'),
         width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            width: '12ch',
-            '&:focus': {
-                width: '20ch',
-            },
+        [theme.breakpoints.up('md')]: {
+            width: '20ch',
         },
     },
 }));
 
 const Navbar = () => {
-    const { toggleTheme, mode } = useTheme();
+    const { theme, toggleTheme } = useTheme();
+    const [profileOpen, setProfileOpen] = useState(false);
+
+    const handleProfileClick = () => {
+        setProfileOpen(true);
+    };
+
+    const handleProfileClose = () => {
+        setProfileOpen(false);
+    };
 
     return (
         <AppBar position="static">
             <Toolbar>
-                <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-                    Note Taking App
+                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                    Diskette
                 </Typography>
                 <Search>
                     <SearchIconWrapper>
                         <SearchIcon />
                     </SearchIconWrapper>
-                    <StyledInputBase placeholder="Search…" inputProps={{ 'aria-label': 'search' }} />
+                    <StyledInputBase
+                        placeholder="Search…"
+                        inputProps={{ 'aria-label': 'search' }}
+                    />
                 </Search>
-                <IconButton edge="end" color="inherit" onClick={toggleTheme}>
-                    {mode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
+                <IconButton color="inherit" onClick={toggleTheme}>
+                    {theme === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
                 </IconButton>
-                <IconButton edge="end" color="inherit">
+                <IconButton
+                    size="large"
+                    edge="end"
+                    color="inherit"
+                    onClick={handleProfileClick}
+                >
                     <AccountCircle />
                 </IconButton>
             </Toolbar>
+            <ProfileModal open={profileOpen} onClose={handleProfileClose} />
         </AppBar>
     );
 };

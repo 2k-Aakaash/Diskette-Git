@@ -1,5 +1,5 @@
-// src/components/CreateNote.jsx
-import React, { useState } from 'react';
+// src/components/EditNote.jsx
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle, Box } from '@mui/material';
 import MDEditor from '@uiw/react-md-editor';
 
@@ -8,19 +8,25 @@ const colors = [
     '#CE93D8', '#F48FB1', '#FFAB91', '#80DEEA', '#C5E1A5'
 ];
 
-const CreateNote = ({ open, onClose, onSave }) => {
-    const [title, setTitle] = useState('Note Title');
-    const [content, setContent] = useState('');
-    const [color, setColor] = useState(colors[0]);
+const EditNote = ({ open, onClose, onSave, note }) => {
+    const [title, setTitle] = useState(note.title);
+    const [content, setContent] = useState(note.content);
+    const [color, setColor] = useState(note.color);
+
+    useEffect(() => {
+        setTitle(note.title);
+        setContent(note.content);
+        setColor(note.color);
+    }, [note]);
 
     const handleSave = () => {
-        onSave({ title, content, color });
+        onSave({ ...note, title, content, color });
         onClose();
     };
 
     return (
         <Dialog open={open} onClose={onClose}>
-            <DialogTitle>Create Note</DialogTitle>
+            <DialogTitle>Edit Note</DialogTitle>
             <DialogContent>
                 <TextField
                     autoFocus
@@ -34,19 +40,19 @@ const CreateNote = ({ open, onClose, onSave }) => {
                 />
                 <MDEditor value={content} onChange={setContent} />
                 <Box sx={{ display: 'flex', mt: 2 }}>
-                    {colors.map((c) => (
+                    {colors.map((col) => (
                         <Box
-                            key={c}
+                            key={col}
                             sx={{
                                 width: 24,
                                 height: 24,
-                                backgroundColor: c,
+                                backgroundColor: col,
                                 borderRadius: '50%',
                                 cursor: 'pointer',
-                                border: color === c ? '2px solid black' : '2px solid transparent',
-                                mr: 1
+                                border: col === color ? '2px solid black' : 'none',
+                                mr: 1,
                             }}
-                            onClick={() => setColor(c)}
+                            onClick={() => setColor(col)}
                         />
                     ))}
                 </Box>
@@ -59,4 +65,4 @@ const CreateNote = ({ open, onClose, onSave }) => {
     );
 };
 
-export default CreateNote;
+export default EditNote;

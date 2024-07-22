@@ -1,3 +1,4 @@
+// src/components/NoteDetails.jsx
 import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Typography, Container } from '@mui/material';

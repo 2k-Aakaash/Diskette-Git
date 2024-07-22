@@ -1,6 +1,6 @@
 // src/main.jsx
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
 import ThemeContextProvider from './ThemeContext';
@@ -8,12 +8,14 @@ import App from './App';
 import './index.css';
 import './styles/global.css';
 
-ReactDOM.render(
+const container = document.getElementById('root');
+const root = createRoot(container);
+
+root.render(
   <ThemeContextProvider>
-    <BrowserRouter>
+    <BrowserRouter basename="/diskette">
       <CssBaseline />
       <App />
     </BrowserRouter>
-  </ThemeContextProvider>,
-  document.getElementById('root')
+  </ThemeContextProvider>
 );
