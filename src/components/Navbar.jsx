@@ -12,6 +12,7 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useTheme } from '../ThemeContext';
 import ProfileModal from './ProfileModal';
+import logo from '../assets/logo.svg'; // Import the SVG logo
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -20,12 +21,11 @@ const Search = styled('div')(({ theme }) => ({
     '&:hover': {
         backgroundColor: alpha(theme.palette.common.white, 0.25),
     },
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-        marginLeft: theme.spacing(1),
-        width: 'auto',
-    },
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
+    flex: 1,
+    display: 'flex',
+    alignItems: 'center',
 }));
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
@@ -42,12 +42,19 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     color: 'inherit',
     '& .MuiInputBase-input': {
         padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
         paddingLeft: `calc(1em + ${theme.spacing(4)})`,
         transition: theme.transitions.create('width'),
         width: '100%',
+        [theme.breakpoints.up('sm')]: {
+            width: '20ch', // Smaller width for smaller screens
+        },
         [theme.breakpoints.up('md')]: {
-            width: '20ch',
+            width: '80ch', // Default width when not focused
+        },
+        '&:focus': {
+            [theme.breakpoints.up('md')]: {
+                width: '110ch', // Width when focused
+            },
         },
     },
 }));
@@ -66,10 +73,8 @@ const Navbar = () => {
 
     return (
         <AppBar position="static">
-            <Toolbar>
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                    Diskette
-                </Typography>
+            <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <img src={logo} alt="Diskette Logo" style={{ height: '30px', marginRight: '10px' }} />
                 <Search>
                     <SearchIconWrapper>
                         <SearchIcon />
@@ -79,17 +84,19 @@ const Navbar = () => {
                         inputProps={{ 'aria-label': 'search' }}
                     />
                 </Search>
-                <IconButton color="inherit" onClick={toggleTheme}>
-                    {theme === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-                </IconButton>
-                <IconButton
-                    size="large"
-                    edge="end"
-                    color="inherit"
-                    onClick={handleProfileClick}
-                >
-                    <AccountCircle />
-                </IconButton>
+                <div>
+                    <IconButton color="inherit" onClick={toggleTheme}>
+                        {theme === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+                    </IconButton>
+                    <IconButton
+                        size="large"
+                        edge="end"
+                        color="inherit"
+                        onClick={handleProfileClick}
+                    >
+                        <AccountCircle />
+                    </IconButton>
+                </div>
             </Toolbar>
             <ProfileModal open={profileOpen} onClose={handleProfileClose} />
         </AppBar>

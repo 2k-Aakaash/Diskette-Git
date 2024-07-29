@@ -10,6 +10,7 @@ import DeleteConfirmationModal from './components/DeleteConfirmationModal';
 import ArchiveSection from './components/ArchiveSection';
 import ExportNote from './components/ExportNote';
 import './index.css';
+import moment from 'moment';
 
 const App = () => {
   const [notes, setNotes] = useState(() => {
@@ -39,7 +40,7 @@ const App = () => {
   };
 
   const handleSaveNote = (note) => {
-    setNotes([...notes, { ...note, id: (notes.length + 1).toString() }]);
+    setNotes([...notes, { ...note, id: (notes.length + 1).toString(), createdAt: moment().toISOString(), updatedAt: moment().toISOString() }]);
     setIsCreateNoteOpen(false);
   };
 
@@ -50,7 +51,9 @@ const App = () => {
   };
 
   const handleSaveEditedNote = (editedNote) => {
-    const updatedNotes = notes.map(note => (note.id === editedNote.id ? editedNote : note));
+    const updatedNotes = notes.map(note =>
+      note.id === editedNote.id ? { ...editedNote, updatedAt: moment().toISOString() } : note
+    );
     setNotes(updatedNotes);
     setIsEditNoteOpen(false);
   };
