@@ -1,5 +1,5 @@
 // src/components/Note.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, Typography, Box, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
@@ -11,16 +11,23 @@ import PushPinIcon from '@mui/icons-material/PushPin';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import PaletteIcon from '@mui/icons-material/Palette';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import moment from 'moment';
 
 const NoteCard = styled(Card)(({ theme, bgcolor }) => ({
-    background: `linear-gradient(180deg, ${bgcolor} 0%, ${bgcolor} 70%, rgba(0,0,0,0) 100%)`,
+    background: `linear-gradient(180deg, ${bgcolor} 0%, ${bgcolor} 70%, ${theme.palette.mode === 'light' ? 'rgba(255,255,255,0)' : 'rgba(0,0,0,0)'} 100%)`,
     cursor: 'pointer',
     borderRadius: '10px',
     marginBottom: theme.spacing(2),
     position: 'relative',
+    transition: 'background 0.3s ease-in-out',
     '&:hover .overlay': {
         opacity: 1,
     },
+    [theme.breakpoints.down('sm')]: {
+        '&:hover .overlay': {
+            opacity: 0,
+        },
+    }
 }));
 
 const Overlay = styled(Box)(({ theme }) => ({
@@ -31,19 +38,50 @@ const Overlay = styled(Box)(({ theme }) => ({
     display: 'flex',
     justifyContent: 'space-around',
     opacity: 0,
-    transition: 'opacity 0.3s',
+    transition: 'opacity 0.3s ease-in-out',
+    '&.visible': {
+        opacity: 1,
+    },
+}));
+
+const Timestamp = styled(Box)(({ theme }) => ({
+    position: 'absolute',
+    bottom: theme.spacing(1),
+    right: theme.spacing(1),
+    backgroundColor: theme.palette.mode === 'light' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)',
+    padding: '2px 5px',
+    borderRadius: '4px',
+    color: theme.palette.text.primary,
+}));
+
+const MoreOptionsIcon = styled(IconButton)(({ theme }) => ({
+    position: 'absolute',
+    top: theme.spacing(1),
+    right: theme.spacing(1),
+    zIndex: 1,
+    [theme.breakpoints.up('sm')]: {
+        display: 'none',
+    },
 }));
 
 const Note = ({ note, onEdit, onDelete, onArchive, onPin, onExport, onChangeColor }) => {
     const navigate = useNavigate();
+    const [overlayVisible, setOverlayVisible] = useState(false);
 
-    const handleClick = () => {
-        navigate(`/note/${note.id}`);
+    const handleCardClick = () => {
+        if (window.innerWidth > 600) {
+            navigate(`/note/${note.id}`);
+        }
+    };
+
+    const toggleOverlayVisibility = (event) => {
+        event.stopPropagation(); // Prevent triggering handleCardClick
+        setOverlayVisible(!overlayVisible);
     };
 
     return (
-        <NoteCard bgcolor={note.color}>
-            <CardContent onClick={handleClick}>
+        <NoteCard bgcolor={note.color} onClick={handleCardClick}>
+            <CardContent>
                 <Typography variant="h5" component="div" fontWeight="bold" sx={{ color: '#000' }}>
                     {note.title}
                 </Typography>
@@ -59,15 +97,22 @@ const Note = ({ note, onEdit, onDelete, onArchive, onPin, onExport, onChangeColo
                     <Markdown>{note.content}</Markdown>
                 </Box>
             </CardContent>
-            <Overlay className="overlay">
+            <Timestamp>
+                <Typography variant="caption" color="textSecondary">
+                    Updated: {moment(note.updatedAt).isValid() ? moment(note.updatedAt).format('MMM DD, YYYY hh:mm A') : 'Invalid Date'}
+                </Typography>
+            </Timestamp>
+            <Overlay className={`overlay ${overlayVisible ? 'visible' : ''}`} onClick={(event) => event.stopPropagation()}>
                 <IconButton onClick={() => onEdit(note.id)}><EditIcon /></IconButton>
                 <IconButton onClick={() => onDelete(note.id)}><DeleteIcon /></IconButton>
                 <IconButton onClick={() => onArchive(note.id)}><ArchiveIcon /></IconButton>
                 <IconButton onClick={() => onPin(note.id)}><PushPinIcon /></IconButton>
                 <IconButton onClick={() => onExport(note.id)}><FileDownloadIcon /></IconButton>
                 <IconButton onClick={() => onChangeColor(note.id)}><PaletteIcon /></IconButton>
-                <IconButton><MoreVertIcon /></IconButton>
             </Overlay>
+            <MoreOptionsIcon onClick={toggleOverlayVisibility}>
+                <MoreVertIcon />
+            </MoreOptionsIcon>
         </NoteCard>
     );
 };
