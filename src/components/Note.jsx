@@ -12,7 +12,6 @@ import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import PaletteIcon from '@mui/icons-material/Palette';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import moment from 'moment';
-// 
 
 const NoteCard = styled(Card)(({ theme, bgcolor }) => ({
     background: `linear-gradient(180deg, ${bgcolor} 0%, ${bgcolor} 70%, ${theme.palette.mode === 'light' ? 'rgba(255,255,255,0)' : 'rgba(0,0,0,0)'} 100%)`,
