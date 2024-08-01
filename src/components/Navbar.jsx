@@ -1,4 +1,3 @@
-// src/components/Navbar.jsx
 import React, { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -12,14 +11,21 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { useTheme } from '../ThemeContext';
 import ProfileModal from './ProfileModal';
-import logo from '../assets/logo.svg'; // Import the SVG logo
+import logo from '../assets/logo.svg';
+
+// Define custom colors
+const navbarBgColor = 'rgb(130, 54, 189)';
+const textColor = 'rgb(255, 255, 255)';
+const searchBgColor = alpha('rgb(255, 255, 255)', 0.15);
+const searchHoverColor = alpha('rgb(255, 255, 255)', 0.25);
+const hoverColor = 'rgb(68, 49, 102)';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: alpha(theme.palette.common.white, 0.15),
+    backgroundColor: searchBgColor,
     '&:hover': {
-        backgroundColor: alpha(theme.palette.common.white, 0.25),
+        backgroundColor: searchHoverColor,
     },
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
@@ -36,24 +42,25 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    color: textColor,
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: 'inherit',
+    color: textColor,
     '& .MuiInputBase-input': {
         padding: theme.spacing(1, 1, 1, 0),
         paddingLeft: `calc(1em + ${theme.spacing(4)})`,
         transition: theme.transitions.create('width'),
         width: '100%',
         [theme.breakpoints.up('sm')]: {
-            width: '20ch', // Smaller width for smaller screens
+            width: '20ch',
         },
         [theme.breakpoints.up('md')]: {
-            width: '80ch', // Default width when not focused
+            width: '80ch',
         },
         '&:focus': {
             [theme.breakpoints.up('md')]: {
-                width: '110ch', // Width when focused
+                width: '110ch',
             },
         },
     },
@@ -72,7 +79,7 @@ const Navbar = () => {
     };
 
     return (
-        <AppBar position="static">
+        <AppBar position="static" sx={{ backgroundColor: navbarBgColor }}>
             <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
                 <img src={logo} alt="Diskette Logo" style={{ height: '30px', marginRight: '10px' }} />
                 <Search>
@@ -86,7 +93,7 @@ const Navbar = () => {
                 </Search>
                 <div>
                     <IconButton color="inherit" onClick={toggleTheme}>
-                        {theme === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+                        {theme === 'dark' ? <Brightness7Icon sx={{ color: textColor }} /> : <Brightness4Icon sx={{ color: textColor }} />}
                     </IconButton>
                     <IconButton
                         size="large"
@@ -94,7 +101,7 @@ const Navbar = () => {
                         color="inherit"
                         onClick={handleProfileClick}
                     >
-                        <AccountCircle />
+                        <AccountCircle sx={{ color: textColor }} />
                     </IconButton>
                 </div>
             </Toolbar>

@@ -1,4 +1,3 @@
-// src/App.jsx
 import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
@@ -9,15 +8,23 @@ import EditNote from './components/EditNote';
 import DeleteConfirmationModal from './components/DeleteConfirmationModal';
 import ArchiveSection from './components/ArchiveSection';
 import ExportNote from './components/ExportNote';
-import './index.css';
-import moment from 'moment';
+import { auth, provider, signInWithPopup, signOut, db } from './firebaseConfig'; // Import updated methods
+import { onSnapshot, query, collection, where, addDoc, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+
+// Define custom colors
+const customColors = {
+  navbarBackground: 'rgb(68, 49, 102)', // Navbar background color
+  navbarText: 'rgb(255, 255, 255)', // Navbar text color
+  buttonCreate: 'rgb(130, 54, 189)', // Create note button color
+  buttonSignIn: 'rgb(130, 54, 189)', // Sign in button color
+  buttonSignOut: 'rgb(45, 36, 76)', // Sign out button color
+  noteBackground: 'rgb(68, 49, 102)', // Note background color
+  noteText: 'rgb(255, 255, 255)' // Note text color
+};
 
 const App = () => {
-  const [notes, setNotes] = useState(() => {
-    const savedNotes = localStorage.getItem('notes');
-    return savedNotes ? JSON.parse(savedNotes) : [];
-  });
-
+  const [notes, setNotes] = useState([]);
+  const [user, setUser] = useState(null);
   const [isCreateNoteOpen, setIsCreateNoteOpen] = useState(false);
   const [isEditNoteOpen, setIsEditNoteOpen] = useState(false);
   const [noteToEdit, setNoteToEdit] = useState(null);
@@ -28,8 +35,48 @@ const App = () => {
   const [isExportNoteOpen, setIsExportNoteOpen] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem('notes', JSON.stringify(notes));
-  }, [notes]);
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      const q = query(collection(db, 'notes'), where('userId', '==', user.uid));
+      const unsubscribe = onSnapshot(q, (snapshot) => {
+        const notesData = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        setNotes(notesData);
+      });
+      return () => unsubscribe();
+    } else {
+      setNotes([]);
+    }
+  }, [user]);
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      setUser(user);
+    } catch (error) {
+      console.error('Error signing in:', error);
+    }
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      setUser(null);
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
 
   const handleCreateNote = () => {
     setIsCreateNoteOpen(true);
@@ -39,9 +86,22 @@ const App = () => {
     setIsCreateNoteOpen(false);
   };
 
-  const handleSaveNote = (note) => {
-    setNotes([...notes, { ...note, id: (notes.length + 1).toString(), createdAt: moment().toISOString(), updatedAt: moment().toISOString() }]);
-    setIsCreateNoteOpen(false);
+  const handleSaveNote = async (note) => {
+    if (user) {
+      const newNote = {
+        ...note,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        userId: user.uid,
+      };
+
+      try {
+        await addDoc(collection(db, 'notes'), newNote);
+        setIsCreateNoteOpen(false);
+      } catch (error) {
+        console.error('Error adding note:', error);
+      }
+    }
   };
 
   const handleEditNote = (noteId) => {
@@ -50,12 +110,18 @@ const App = () => {
     setIsEditNoteOpen(true);
   };
 
-  const handleSaveEditedNote = (editedNote) => {
-    const updatedNotes = notes.map(note =>
-      note.id === editedNote.id ? { ...editedNote, updatedAt: moment().toISOString() } : note
-    );
-    setNotes(updatedNotes);
-    setIsEditNoteOpen(false);
+  const handleSaveEditedNote = async (editedNote) => {
+    if (user) {
+      const noteRef = doc(db, 'notes', editedNote.id);
+      const updatedNote = { ...editedNote, updatedAt: new Date().toISOString() };
+
+      try {
+        await updateDoc(noteRef, updatedNote);
+        setIsEditNoteOpen(false);
+      } catch (error) {
+        console.error('Error updating note:', error);
+      }
+    }
   };
 
   const handleDeleteNote = (noteId) => {
@@ -63,25 +129,26 @@ const App = () => {
     setIsDeleteModalOpen(true);
   };
 
-  const confirmDeleteNote = () => {
-    const updatedNotes = notes.filter(note => note.id !== noteToDelete);
-    setNotes(updatedNotes);
-    setIsDeleteModalOpen(false);
-    setNoteToDelete(null);
+  const confirmDeleteNote = async () => {
+    if (user) {
+      const noteRef = doc(db, 'notes', noteToDelete);
+
+      try {
+        await deleteDoc(noteRef);
+        setIsDeleteModalOpen(false);
+        setNoteToDelete(null);
+      } catch (error) {
+        console.error('Error deleting note:', error);
+      }
+    }
   };
 
   const handleArchiveNote = (noteId) => {
-    const noteToArchive = notes.find(note => note.id === noteId);
-    setArchivedNotes([...archivedNotes, noteToArchive]);
-    const updatedNotes = notes.filter(note => note.id !== noteId);
-    setNotes(updatedNotes);
+    // Logic for archiving a note
   };
 
   const handleUnarchiveNote = (noteId) => {
-    const noteToUnarchive = archivedNotes.find(note => note.id === noteId);
-    setNotes([...notes, noteToUnarchive]);
-    const updatedArchivedNotes = archivedNotes.filter(note => note.id !== noteId);
-    setArchivedNotes(updatedArchivedNotes);
+    // Logic for unarchiving a note
   };
 
   const handlePinNote = (noteId) => {
@@ -115,7 +182,12 @@ const App = () => {
 
   return (
     <>
-      <Navbar />
+      <Navbar
+        onSignIn={handleGoogleSignIn}
+        onSignOut={handleSignOut}
+        user={user}
+        customColors={customColors}
+      />
       <Routes>
         <Route path="/" element={
           <Dashboard
@@ -128,10 +200,13 @@ const App = () => {
             onPinNote={handlePinNote}
             onExportNote={handleExportNote}
             onChangeColor={handleChangeColor}
+            onSignIn={handleGoogleSignIn}
+            onSignOut={handleSignOut}
+            customColors={customColors}
           />
         } />
-        <Route path="/note/:id" element={<NoteDetails notes={notes} />} />
-        <Route path="/profile/archive" element={<ArchiveSection archivedNotes={archivedNotes} onUnarchive={handleUnarchiveNote} />} />
+        <Route path="/note/:id" element={<NoteDetails notes={notes} customColors={customColors} />} />
+        <Route path="/profile/archive" element={<ArchiveSection archivedNotes={archivedNotes} onUnarchive={handleUnarchiveNote} customColors={customColors} />} />
       </Routes>
       <CreateNote open={isCreateNoteOpen} onClose={handleCloseCreateNote} onSave={handleSaveNote} />
       {noteToEdit && <EditNote open={isEditNoteOpen} onClose={() => setIsEditNoteOpen(false)} onSave={handleSaveEditedNote} note={noteToEdit} />}
