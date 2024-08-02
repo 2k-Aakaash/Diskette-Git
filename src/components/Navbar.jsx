@@ -1,69 +1,71 @@
 import React, { useState } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
-import { styled, alpha } from '@mui/material/styles';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { styled } from '@mui/material/styles';
 import { useTheme } from '../ThemeContext';
 import ProfileModal from './ProfileModal';
-import logo from '../assets/logo.svg';
+import logoLight from '../assets/logo-light.svg';
+import logoDark from '../assets/logo-dark.svg';
+import searchIconLight from '../assets/search-icon-light.svg';
+import searchIconDark from '../assets/search-icon-dark.svg';
+import profileIconLight from '../assets/profile-icon-light.svg';
+import profileIconDark from '../assets/profile-icon-dark.svg';
+import darkModeIconLight from '../assets/dark-mode-icon-light.svg';
+import darkModeIconDark from '../assets/light-mode-icon-dark.svg';
 
 // Define custom colors
-const navbarBgColor = 'rgb(130, 54, 189)';
-const textColor = 'rgb(255, 255, 255)';
-const searchBgColor = alpha('rgb(255, 255, 255)', 0.15);
-const searchHoverColor = alpha('rgb(255, 255, 255)', 0.25);
-const hoverColor = 'rgb(68, 49, 102)';
+const navbarBgColorLight = '#f7e6ff';
+const navbarBgColorDark = '#440054';
+const textColorLight = 'rgb(0, 0, 0)';
+const textColorDark = 'rgb(255, 255, 255)';
+const searchBgColorLight = '#e8a4ff';
+const searchBgColorDark = '#e8a4ff';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: searchBgColor,
-    '&:hover': {
-        backgroundColor: searchHoverColor,
-    },
+    borderRadius: '12px',
+    backgroundColor: theme.palette.mode === 'dark' ? searchBgColorDark : searchBgColorLight,
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
     flex: 1,
     display: 'flex',
     alignItems: 'center',
+    padding: '0 10px',
+    width: '30ch', // Shorten the width
 }));
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
-    padding: theme.spacing(0, 2),
+    padding: theme.spacing(0, 1),
     height: '100%',
     position: 'absolute',
-    pointerEvents: 'none',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    color: textColor,
+    color: theme.palette.mode === 'dark' ? textColorDark : textColorLight,
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: textColor,
-    '& .MuiInputBase-input': {
-        padding: theme.spacing(1, 1, 1, 0),
-        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('sm')]: {
-            width: '20ch',
-        },
+    color: theme.palette.mode === 'dark' ? textColorDark : textColorLight,
+    padding: theme.spacing(1),
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+        width: '15ch',
+    },
+    '&:focus': {
         [theme.breakpoints.up('md')]: {
-            width: '80ch',
-        },
-        '&:focus': {
-            [theme.breakpoints.up('md')]: {
-                width: '110ch',
-            },
+            width: '30ch', // Focus width
         },
     },
+}));
+
+const CustomAppBar = styled(AppBar)(({ theme }) => ({
+    backgroundColor: theme.palette.mode === 'dark' ? navbarBgColorDark : navbarBgColorLight,
+    borderRadius: '12px',
+    margin: '10px',
 }));
 
 const Navbar = () => {
@@ -79,12 +81,12 @@ const Navbar = () => {
     };
 
     return (
-        <AppBar position="static" sx={{ backgroundColor: navbarBgColor }}>
+        <CustomAppBar position="static">
             <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <img src={logo} alt="Diskette Logo" style={{ height: '30px', marginRight: '10px' }} />
+                <img src={theme === 'dark' ? logoDark : logoLight} alt="Diskette Logo" style={{ height: '30px', marginRight: '10px' }} />
                 <Search>
                     <SearchIconWrapper>
-                        <SearchIcon />
+                        <img src={theme === 'dark' ? searchIconDark : searchIconLight} alt="Search Icon" />
                     </SearchIconWrapper>
                     <StyledInputBase
                         placeholder="Search…"
@@ -93,7 +95,7 @@ const Navbar = () => {
                 </Search>
                 <div>
                     <IconButton color="inherit" onClick={toggleTheme}>
-                        {theme === 'dark' ? <Brightness7Icon sx={{ color: textColor }} /> : <Brightness4Icon sx={{ color: textColor }} />}
+                        <img src={theme === 'dark' ? darkModeIconDark : darkModeIconLight} alt="Theme Toggle Icon" style={{ width: '24px', height: '24px' }} />
                     </IconButton>
                     <IconButton
                         size="large"
@@ -101,12 +103,12 @@ const Navbar = () => {
                         color="inherit"
                         onClick={handleProfileClick}
                     >
-                        <AccountCircle sx={{ color: textColor }} />
+                        <img src={theme === 'dark' ? profileIconDark : profileIconLight} alt="Profile Icon" style={{ width: '20px', height: '20px' }} />
                     </IconButton>
                 </div>
             </Toolbar>
             <ProfileModal open={profileOpen} onClose={handleProfileClose} />
-        </AppBar>
+        </CustomAppBar>
     );
 };
 
