@@ -29,3 +29,18 @@
     src: url('https://ik.imagekit.io/026k2i7ys/fonts/ExensaGrotesk-Light.woff2?updatedAt=1721482158525') format('woff2');
     font-weight: 100;
 }
+
+:root {
+    --color-50: #fcf3ff;
+    --color-100: #f7e6ff;
+    --color-200: #f0ccff;
+    --color-300: #e8a4ff;
+    --color-400: #db6eff;
+    --color-500: #c838fd;
+    --color-600: #b621e8;
+    --color-700: #b621e8;
+    --color-800: #7a0f99;
+    --color-900: #68127d;
+    --color-950: #440054;
+    --color-1000: #200027;
+}

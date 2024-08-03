@@ -13,6 +13,12 @@ import PaletteIcon from '@mui/icons-material/Palette';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import moment from 'moment';
 
+// Define custom colors using CSS variables
+const customColors = {
+    noteText: '#FFFFFF',
+    noteBackground: '#372C56'
+};
+
 const NoteCard = styled(Card)(({ theme, bgcolor }) => ({
     background: `linear-gradient(180deg, ${bgcolor} 0%, ${bgcolor} 70%, ${theme.palette.mode === 'light' ? 'rgba(255,255,255,0)' : 'rgba(0,0,0,0)'} 100%)`,
     cursor: 'pointer',
@@ -20,6 +26,7 @@ const NoteCard = styled(Card)(({ theme, bgcolor }) => ({
     marginBottom: theme.spacing(2),
     position: 'relative',
     transition: 'background 0.3s ease-in-out',
+    height: '150px', // Set a fixed height for all notes
     '&:hover .overlay': {
         opacity: 1,
     },
@@ -80,9 +87,9 @@ const Note = ({ note, onEdit, onDelete, onArchive, onPin, onExport, onChangeColo
     };
 
     return (
-        <NoteCard bgcolor={note.color} onClick={handleCardClick}>
+        <NoteCard bgcolor={note.color || customColors.noteBackground} onClick={handleCardClick}>
             <CardContent>
-                <Typography variant="h5" component="div" fontWeight="bold" sx={{ color: '#000' }}>
+                <Typography variant="h5" component="div" fontWeight="bold" sx={{ color: customColors.noteText }}>
                     {note.title}
                 </Typography>
                 <Box
@@ -91,7 +98,9 @@ const Note = ({ note, onEdit, onDelete, onArchive, onPin, onExport, onChangeColo
                         textOverflow: 'ellipsis',
                         display: '-webkit-box',
                         WebkitBoxOrient: 'vertical',
-                        WebkitLineClamp: 4
+                        WebkitLineClamp: 6, // Adjust the line clamp to fit the fixed height
+                        color: customColors.noteText,
+                        height: '180px' // Adjust the height of the content box to fit the fixed card height
                     }}
                 >
                     <Markdown>{note.content}</Markdown>

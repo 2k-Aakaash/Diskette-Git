@@ -1,0 +1,44 @@
+.sidebar-container {
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-950);
+    color: var(--color-50);
+    height: 100%;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    background-color: var(--color-800);
+}
+
+.menu-icon {
+    color: var(--color-50);
+}
+
+.brand-logo {
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin-left: 16px;
+}
+
+.sidebar-content {
+    flex: 1;
+}
+
+.sidebar-content .icon {
+    color: var(--color-50);
+    margin-right: 16px;
+}
+
+.sidebar-content .text {
+    color: var(--color-50);
+}
+
+.sidebar-footer {
+    padding: 16px;
+    background-color: var(--color-800);
+    text-align: center;
+}
