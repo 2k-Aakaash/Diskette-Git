@@ -1,0 +1,9 @@
+.css-s37jdl-MuiPaper-root-MuiAppBar-root{
+    width: 95%;
+}
+
+@media screen and (max-width: 480px){
+    .css-s37jdl-MuiPaper-root-MuiAppBar-root{
+        width: 90%;
+    }
+}

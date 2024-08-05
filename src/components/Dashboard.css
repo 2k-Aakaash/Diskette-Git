@@ -1,54 +1,116 @@
 .dashboard-container {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    transition: width 0.3s ease;
+}
+
+.sidebar-open .sidebar {
+    width: 30%;
+}
+
+.sidebar-closed .sidebar {
+    width: 0;
+    display: none;
+}
+
+.sidebar-open .main-content {
+    width: 70%;
+}
+
+.sidebar-closed .main-content {
+    width: 100%;
+}
+
+.main-content {
     padding: 20px;
-    background-color: rgb(29, 25, 53);
+    transition: width 0.3s ease;
+    position: relative;
+}
+
+.notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
 }
 
 .loading-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 80vh;
+    height: 100%;
 }
 
-.notes-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 16px;
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #4a148c;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.hamburger-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.create-note-button-floating {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #4a148c;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.section-title {
+    font-size: 24px;
+    color: #4a148c;
+    margin-bottom: 20px;
 }
 
 .empty-notes-container {
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 80vh;
-    width: 100%;
+    height: 200px;
 }
 
 .empty-notes-card {
-    padding: 20px;
     text-align: center;
-    max-width: 600px;
-    width: 100%;
-    background-color: rgb(55, 44, 86);
-    color: rgb(255, 255, 255); /* Primary text color */
+    border: 1px solid #ccc;
+    padding: 20px;
     border-radius: 8px;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
 }
 
 .create-note-button {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: rgb(130, 54, 189);
-    color: rgb(255, 255, 255);
+    background-color: #4a148c;
+    color: white;
     border: none;
     padding: 10px 20px;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.create-note-button:hover {
-    background-color: rgb(110, 44, 169);
 }
