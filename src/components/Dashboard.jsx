@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Grid, CircularProgress, Box, Typography, Paper } from '@mui/material';
+import './Dashboard.css';
 import Note from './Note';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
@@ -21,61 +21,29 @@ const Dashboard = ({ notes, onCreateNote, onDragEnd, onEditNote, onDeleteNote, o
     }, []);
 
     return (
-        <div style={{ padding: '20px', backgroundColor: 'rgb(29, 25, 53)' }}>
+        <div className="dashboard-container">
             {loading ? (
-                <Box display="flex" justifyContent="center" alignItems="center" height="80vh">
-                    <CircularProgress />
-                </Box>
+                <div className="loading-container">
+                    <div className="spinner"></div>
+                </div>
             ) : (
                 <DragDropContext onDragEnd={onDragEnd}>
                     <Droppable droppableId="notes">
                         {(provided) => (
-                            <Grid container spacing={2} ref={provided.innerRef} {...provided.droppableProps}>
+                            <div className="notes-grid" ref={provided.innerRef} {...provided.droppableProps}>
                                 {notes.length === 0 ? (
-                                    <Box
-                                        display="flex"
-                                        flexDirection="column"
-                                        justifyContent="center"
-                                        alignItems="center"
-                                        height="80vh"
-                                        width="100%"
-                                    >
-                                        <Paper
-                                            elevation={3}
-                                            style={{
-                                                padding: '20px',
-                                                textAlign: 'center',
-                                                maxWidth: '600px',
-                                                width: '100%',
-                                                backgroundColor: 'rgb(55, 44, 86)',
-                                                color: 'rgb(255, 255, 255)' // Primary text color
-                                            }}
-                                        >
-                                            <Typography variant="h5" gutterBottom>
-                                                No Diskettes Found
-                                            </Typography>
-                                            <Typography variant="body1" paragraph>
-                                                It looks like you don't have any Diskettes yet. Start by creating your first Diskette.
-                                            </Typography>
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={onCreateNote}
-                                                style={{ backgroundColor: 'rgb(130, 54, 189)' }}
-                                            >
-                                                Create Your First Diskette
-                                            </Button>
-                                        </Paper>
-                                    </Box>
+                                    <div className="empty-notes-container">
+                                        <div className="empty-notes-card">
+                                            <h5>No Diskettes Found</h5>
+                                            <p>It looks like you don't have any Diskettes yet. Start by creating your first Diskette.</p>
+                                            <button className="create-note-button" onClick={onCreateNote}>Create Your First Diskette</button>
+                                        </div>
+                                    </div>
                                 ) : (
                                     notes.map((note, index) => (
                                         <Draggable key={note.id} draggableId={note.id} index={index}>
                                             {(provided) => (
-                                                <Grid
-                                                    item
-                                                    xs={12}
-                                                    sm={6}
-                                                    md={4}
+                                                <div
                                                     ref={provided.innerRef}
                                                     {...provided.draggableProps}
                                                     {...provided.dragHandleProps}
@@ -89,30 +57,20 @@ const Dashboard = ({ notes, onCreateNote, onDragEnd, onEditNote, onDeleteNote, o
                                                         onExport={onExportNote}
                                                         onChangeColor={onChangeColor}
                                                     />
-                                                </Grid>
+                                                </div>
                                             )}
                                         </Draggable>
                                     ))
                                 )}
                                 {provided.placeholder}
-                            </Grid>
+                            </div>
                         )}
                     </Droppable>
                 </DragDropContext>
             )}
-            <Button
-                variant="contained"
-                onClick={onCreateNote}
-                style={{
-                    position: 'fixed',
-                    bottom: '20px',
-                    right: '20px',
-                    backgroundColor: 'rgb(130, 54, 189)',
-                    color: 'rgb(255, 255, 255)'
-                }}
-            >
+            <button className="create-note-button" onClick={onCreateNote}>
                 Create Diskette
-            </Button>
+            </button>
         </div>
     );
 };

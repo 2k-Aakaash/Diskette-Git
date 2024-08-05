@@ -1,0 +1,54 @@
+.dashboard-container {
+    padding: 20px;
+    background-color: rgb(29, 25, 53);
+}
+
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
+
+.notes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+}
+
+.empty-notes-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+    width: 100%;
+}
+
+.empty-notes-card {
+    padding: 20px;
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+    background-color: rgb(55, 44, 86);
+    color: rgb(255, 255, 255); /* Primary text color */
+    border-radius: 8px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.create-note-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgb(130, 54, 189);
+    color: rgb(255, 255, 255);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.create-note-button:hover {
+    background-color: rgb(110, 44, 169);
+}

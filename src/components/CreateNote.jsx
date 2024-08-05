@@ -1,19 +1,18 @@
-// src/components/CreateNote.jsx
 import React, { useState } from 'react';
-import { TextField, Button, Dialog, DialogActions, DialogContent, DialogTitle, Box } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField, Box } from '@mui/material';
 import MDEditor from '@uiw/react-md-editor';
+import './CreateNote.css';
 
-// Define custom colors
 const customColors = {
-    noteBackground: 'rgb(68, 49, 102)', // Original background color
-    noteText: 'rgb(255, 255, 255)', // Primary text color
-    noteOverlay: 'rgba(0, 0, 0, 0.5)', // Overlay background color
-    noteTimestampBg: 'rgba(255, 255, 255, 0.8)', // Timestamp background color
-    actionButton: 'rgb(130, 54, 189)', // Action buttons color
-    iconColor: 'rgb(255, 255, 255)', // Icon color
-    modalBackground: 'rgb(29, 25, 53)', // Modal background color
-    buttonColor: 'rgb(130, 54, 189)', // Button color
-    textColor: 'rgb(255, 255, 255)', // Text color
+    noteBackground: 'rgb(68, 49, 102)',
+    noteText: 'rgb(255, 255, 255)',
+    noteOverlay: 'rgba(0, 0, 0, 0.5)',
+    noteTimestampBg: 'rgba(255, 255, 255, 0.8)',
+    actionButton: 'rgb(130, 54, 189)',
+    iconColor: 'rgb(255, 255, 255)',
+    modalBackground: 'rgb(29, 25, 53)',
+    buttonColor: 'rgb(130, 54, 189)',
+    textColor: 'rgb(255, 255, 255)',
 };
 
 const colors = [
@@ -36,7 +35,7 @@ const CreateNote = ({ open, onClose, onSave }) => {
     };
 
     return (
-        <Dialog open={open} onClose={onClose} sx={{ '& .MuiDialog-paper': { backgroundColor: customColors.modalBackground } }}>
+        <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth sx={{ '& .MuiDialog-paper': { backgroundColor: customColors.modalBackground, width: '90%' } }}>
             <DialogTitle sx={{ color: customColors.textColor }}>Create Note</DialogTitle>
             <DialogContent>
                 <TextField

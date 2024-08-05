@@ -1,0 +1,42 @@
+/* src/components/CreateNote.css */
+
+/* Custom styles for the color picker boxes */
+.color-picker-box {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    transition: border 0.3s ease-in-out;
+}
+
+.color-picker-box.selected {
+    border: 2px solid var(--text-color, #FFFFFF);
+}
+
+.dialog-paper {
+    background-color: var(--modal-bg-color, #1D1935);
+    width: 90% !important;
+    height: 90% !important;
+}
+
+.w-md-editor{
+    height: 400px !important;
+}
+
+.w-md-editor-toolbar li > button{
+    scale: 1.5;
+    margin: 10px;
+}
+
+.w-md-editor-fullscreen{
+    height: 100% !important;
+}
+
+@media screen and (max-width: 480px){
+    .w-md-editor-toolbar li > button{
+        scale: 0.6;
+        margin: 0px;
+    }
+}
