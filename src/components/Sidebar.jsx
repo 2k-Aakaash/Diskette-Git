@@ -2,9 +2,10 @@ import React from 'react';
 import { List, ListItem, Divider, IconButton } from '@mui/material';
 import NoteAddIcon from '@mui/icons-material/NoteAdd';
 import ArchiveIcon from '@mui/icons-material/Archive';
+import SettingsIcon from '@mui/icons-material/Settings';
 import './Sidebar.css';
 
-const Sidebar = ({ open, onClose }) => (
+const Sidebar = ({ open }) => (
     <div className={`sidebar-container ${open ? 'open' : ''}`}>
         <div className="sidebar-header">
             <span className="brand-logo">Diskette</span>
@@ -23,6 +24,7 @@ const Sidebar = ({ open, onClose }) => (
         <Divider />
         <div className="sidebar-footer">
             <IconButton className="settings-icon">
+                <SettingsIcon />
                 <span className="text">Settings</span>
             </IconButton>
         </div>

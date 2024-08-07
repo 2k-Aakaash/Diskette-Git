@@ -30,8 +30,8 @@ const Dashboard = ({ notes, onCreateNote, onDragEnd, onEditNote, onDeleteNote, o
     const regularNotes = notes.filter(note => !note.isPriority);
 
     return (
-        <div className={`dashboard-container ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
-            <Sidebar open={sidebarOpen} onClose={toggleSidebar} />
+        <div className={`dashboard-container ${sidebarOpen ? 'sidebar-open' : ''}`}>
+            <Sidebar open={sidebarOpen} />
             <div className="main-content">
                 <button className="hamburger-button" onClick={toggleSidebar}>
                     ☰

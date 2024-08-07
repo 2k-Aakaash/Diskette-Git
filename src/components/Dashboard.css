@@ -1,30 +1,29 @@
 .dashboard-container {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: auto 1fr;
     height: 100vh;
-    transition: width 0.3s ease;
+    transition: all 0.3s ease;
 }
 
-.sidebar-open .sidebar {
-    width: 30%;
-}
-
-.sidebar-closed .sidebar {
-    width: 0;
-    display: none;
+.sidebar-open .sidebar-container {
+    transform: translateX(0);
 }
 
 .sidebar-open .main-content {
-    width: 70%;
+    margin-left: 250px; /* Sidebar width */
+}
+
+.sidebar-closed .sidebar-container {
+    transform: translateX(-100%);
 }
 
 .sidebar-closed .main-content {
-    width: 100%;
+    margin-left: 0;
 }
 
 .main-content {
     padding: 20px;
-    transition: width 0.3s ease;
+    transition: margin-left 0.3s ease;
     position: relative;
 }
 
@@ -79,38 +78,24 @@
     height: 60px;
     font-size: 24px;
     display: flex;
-    align-items: center;
     justify-content: center;
-    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+    align-items: center;
     cursor: pointer;
-}
-
-.section-title {
-    font-size: 24px;
-    color: #4a148c;
-    margin-bottom: 20px;
 }
 
 .empty-notes-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 200px;
+    height: 100%;
 }
 
 .empty-notes-card {
     text-align: center;
-    border: 1px solid #ccc;
-    padding: 20px;
-    border-radius: 8px;
-    background-color: #f9f9f9;
 }
 
-.create-note-button {
-    background-color: #4a148c;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
+.section-title {
+    font-size: 1.5rem;
+    color: #4a148c;
+    margin-top: 20px;
 }
