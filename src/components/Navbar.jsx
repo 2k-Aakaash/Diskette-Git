@@ -66,6 +66,7 @@ const CustomAppBar = styled(AppBar)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? navbarBgColorDark : navbarBgColorLight,
     borderRadius: '12px',
     margin: '10px',
+    width: 'auto',
 }));
 
 const Navbar = () => {
