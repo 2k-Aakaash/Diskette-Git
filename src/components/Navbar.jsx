@@ -67,6 +67,7 @@ const CustomAppBar = styled(AppBar)(({ theme }) => ({
     borderRadius: '12px',
     margin: '10px',
     width: 'auto',
+    boxShadow: 'none',
 }));
 
 const Navbar = () => {
@@ -90,7 +91,7 @@ const Navbar = () => {
                         <img src={theme === 'dark' ? searchIconDark : searchIconLight} alt="Search Icon" />
                     </SearchIconWrapper>
                     <StyledInputBase
-                        placeholder="Search…"
+                        placeholder="Search Diskettes…"
                         inputProps={{ 'aria-label': 'search' }}
                     />
                 </Search>
