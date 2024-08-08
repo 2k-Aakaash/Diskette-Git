@@ -16,7 +16,7 @@ import darkModeIconLight from '../assets/dark-mode-icon-light.svg';
 import darkModeIconDark from '../assets/light-mode-icon-dark.svg';
 
 // Define custom colors
-const navbarBgColorLight = '#f7e6ff';
+const navbarBgColorLight = '#F7E6FF';
 const navbarBgColorDark = '#440054';
 const textColorLight = 'rgb(0, 0, 0)';
 const textColorDark = 'rgb(255, 255, 255)';
