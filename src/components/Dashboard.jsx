@@ -3,6 +3,7 @@ import './Dashboard.css';
 import Note from './Note';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Sidebar from './Sidebar';
+import hamburgerIcon from '../assets/menu-icon.png';
 
 const Dashboard = ({ notes, onCreateNote, onDragEnd, onEditNote, onDeleteNote, onArchiveNote, onPinNote, onExportNote, onChangeColor }) => {
     const [loading, setLoading] = useState(true);
@@ -34,15 +35,16 @@ const Dashboard = ({ notes, onCreateNote, onDragEnd, onEditNote, onDeleteNote, o
             <Sidebar open={sidebarOpen} />
             <div className="main-content">
                 <button className="hamburger-button" onClick={toggleSidebar}>
-                    ☰
+                    <img src={hamburgerIcon} alt="Menu" />
                 </button>
+
                 {loading ? (
                     <div className="loading-container">
                         <div className="spinner"></div>
                     </div>
                 ) : (
                     <>
-                        <h2 className="section-title">Priority Diskettes</h2>
+                        <h1 className="section-title priority-diskette">Priority Diskettes</h1>
                         <DragDropContext onDragEnd={onDragEnd}>
                             <Droppable droppableId="priorityNotes">
                                 {(provided) => (

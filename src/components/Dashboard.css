@@ -95,7 +95,24 @@
 }
 
 .section-title {
-    font-size: 1.5rem;
+    /* font-size: 1.5rem; */
     color: #4a148c;
     margin-top: 20px;
+}
+
+.priority-diskette{
+    margin-left: 70px;
+    display: inline;
+}
+
+.hamburger-button {
+    background: none;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.hamburger-button img {
+    width: 30px;
+    height: 30px;
 }
