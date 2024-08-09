@@ -4,7 +4,7 @@
     left: 0; /* Start at the edge of the viewport */
     width: 240px; /* Increased width */
     height: calc(100dvh - 100px); /* Adjusted height to use viewport height */
-    background-color: #f4e7ff; /* Matches background from design */
+    background-color: #F7E6FF; /* Matches background from design */
     border-radius: 12px; /* Rounded corners */
     padding: 16px; /* Add padding around content */
     transform: translateX(-260px); /* Completely hide the sidebar off-screen */
