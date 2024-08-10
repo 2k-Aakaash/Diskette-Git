@@ -100,6 +100,7 @@
     margin-top: 20px;
 }
 
+/* Keep the existing Priority Diskette text styling */
 .priority-diskette{
     margin-left: 60px;
     display: inline;

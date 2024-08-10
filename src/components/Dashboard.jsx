@@ -34,8 +34,6 @@ const Dashboard = ({ notes, onCreateNote, onDragEnd, onEditNote, onDeleteNote, o
         <div className={`dashboard-container ${sidebarOpen ? 'sidebar-open' : ''}`}>
             <Sidebar open={sidebarOpen} />
             <div className="main-content">
-
-
                 {loading ? (
                     <div className="loading-container">
                         <div className="spinner"></div>
@@ -45,14 +43,15 @@ const Dashboard = ({ notes, onCreateNote, onDragEnd, onEditNote, onDeleteNote, o
                         <button className="hamburger-button" onClick={toggleSidebar}>
                             <img src={hamburgerIcon} alt="Menu" />
                         </button>
+
                         <h1 className="section-title priority-diskette">Priority Diskettes</h1>
                         <DragDropContext onDragEnd={onDragEnd}>
-                            <Droppable droppableId="priorityNotes">
+                            <Droppable droppableId="priorityNotes" direction="horizontal">
                                 {(provided) => (
-                                    <div className="notes-grid" ref={provided.innerRef} {...provided.droppableProps}>
+                                    <div className="notes-grid horizontal-scroll" ref={provided.innerRef} {...provided.droppableProps}>
                                         {priorityNotes.length === 0 ? (
                                             <div className="empty-notes-container">
-                                                <div className="empty-notes-card">
+                                                <div className="empty-notes-card centered-empty-message">
                                                     <h5>No Priority Diskettes Found</h5>
                                                 </div>
                                             </div>
@@ -92,7 +91,7 @@ const Dashboard = ({ notes, onCreateNote, onDragEnd, onEditNote, onDeleteNote, o
                                     <div className="notes-grid" ref={provided.innerRef} {...provided.droppableProps}>
                                         {regularNotes.length === 0 ? (
                                             <div className="empty-notes-container">
-                                                <div className="empty-notes-card">
+                                                <div className="empty-notes-card centered-empty-message">
                                                     <h5>No Diskettes Found</h5>
                                                     <p>It looks like you don't have any Diskettes yet. Start by creating your first Diskette.</p>
                                                     <button className="create-note-button" onClick={onCreateNote}>Create Your First Diskette</button>
