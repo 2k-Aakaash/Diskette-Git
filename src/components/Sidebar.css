@@ -8,7 +8,7 @@
     border-radius: 12px; /* Rounded corners */
     padding: 16px; /* Add padding around content */
     transform: translateX(-260px); /* Completely hide the sidebar off-screen */
-    transition: transform 0.3s ease;
+    transition: transform 0.5s cubic-bezier(1, 0, 0, 1);
     z-index: 1000;
     display: flex;
     flex-direction: column;

@@ -34,9 +34,7 @@ const Dashboard = ({ notes, onCreateNote, onDragEnd, onEditNote, onDeleteNote, o
         <div className={`dashboard-container ${sidebarOpen ? 'sidebar-open' : ''}`}>
             <Sidebar open={sidebarOpen} />
             <div className="main-content">
-                <button className="hamburger-button" onClick={toggleSidebar}>
-                    <img src={hamburgerIcon} alt="Menu" />
-                </button>
+
 
                 {loading ? (
                     <div className="loading-container">
@@ -44,6 +42,9 @@ const Dashboard = ({ notes, onCreateNote, onDragEnd, onEditNote, onDeleteNote, o
                     </div>
                 ) : (
                     <>
+                        <button className="hamburger-button" onClick={toggleSidebar}>
+                            <img src={hamburgerIcon} alt="Menu" />
+                        </button>
                         <h1 className="section-title priority-diskette">Priority Diskettes</h1>
                         <DragDropContext onDragEnd={onDragEnd}>
                             <Droppable droppableId="priorityNotes">
@@ -84,7 +85,7 @@ const Dashboard = ({ notes, onCreateNote, onDragEnd, onEditNote, onDeleteNote, o
                             </Droppable>
                         </DragDropContext>
 
-                        <h2 className="section-title">Diskettes</h2>
+                        <h1 className="section-title">Diskettes</h1>
                         <DragDropContext onDragEnd={onDragEnd}>
                             <Droppable droppableId="regularNotes">
                                 {(provided) => (

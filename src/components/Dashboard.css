@@ -23,7 +23,7 @@
 
 .main-content {
     padding: 20px;
-    transition: margin-left 0.3s ease;
+    transition: margin-left 0.5s cubic-bezier(1, 0, 0, 1);
     position: relative;
 }
 
@@ -101,7 +101,7 @@
 }
 
 .priority-diskette{
-    margin-left: 70px;
+    margin-left: 60px;
     display: inline;
 }
 
