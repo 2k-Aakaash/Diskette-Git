@@ -2,20 +2,35 @@
 .note-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px; /* Adjust spacing between cards */
+    gap: 30px; /* Adjust spacing between cards */
     justify-content: center; /* Center align the cards if needed */
 }
 
 .note-card {
     position: relative;
-    width: 350px; /* Fixed width */
-    max-width: calc(100% - 20px); /* Ensure it fits within the container */
-    padding: 15px;
-    border-radius: 10px;
+    width: 100%; /* Allow the card to take full width of its container */
+    max-width: 350px; /* Fixed maximum width */
+    height: 210px; /* Fixed height for all cards */
+    padding: 20px 10px 10px 20px;
+    border-radius: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.3s ease-in-out;
     touch-action: manipulation; /* Optimize touch interactions */
     box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    flex: 1 1 300px; /* Allow cards to grow and shrink with a minimum width */
+    overflow: hidden; /* Hide overflow content */
+}
+
+.note-card h1{
+    margin: 0;
+}
+
+@media (min-width: 769px) {
+    .note-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid with a minimum card width */
+        gap: 20px; /* Adjust spacing between cards */
+    }
 }
 
 @media (max-width: 768px) {
@@ -33,16 +48,21 @@
 .card-content {
     overflow: hidden;
     text-overflow: ellipsis;
+    height: calc(100% - 30px); /* Adjust height to fit content within the fixed height */
+    display: flex;
+    flex-direction: column;
 }
 
 .note-title {
     font-weight: bold;
     margin-bottom: 10px;
+    flex-shrink: 0; /* Prevent title from shrinking */
 }
 
 .note-text {
+    flex: 1; /* Allow note text to take up available space */
     display: -webkit-box;
-    -webkit-line-clamp: 6;
+    -webkit-line-clamp: 3; /* Limit the number of lines to prevent overflow */
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;

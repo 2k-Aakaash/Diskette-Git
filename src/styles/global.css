@@ -27,7 +27,7 @@
 }
 
 /* src/styles/global.css */
-.dashboard {
+/* .dashboard {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -37,7 +37,7 @@
 }
 
 .note-card {
-  flex: 1 1 calc(33.33% - 20px); /* Adjust this as needed for responsive design */
+  flex: 1 1 calc(33.33% - 20px);
   box-sizing: border-box;
   padding: 10px;
   border-radius: 10px;
@@ -58,4 +58,4 @@
   cursor: pointer;
   border: 1px solid #ccc;
   border-radius: 5px;
-}
+} */
