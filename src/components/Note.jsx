@@ -52,7 +52,7 @@ const Note = ({ note, onEdit, onDelete, onArchive, onPin, onExport, onChangeColo
             onMouseLeave={() => window.innerWidth >= 480 && setOverlayVisible(false)}
         >
             <div className="card-content">
-                <h5 className="note-title">{note.title}</h5>
+                <h1 className="note-title">{note.title}</h1>
                 <div className="note-text">
                     <Markdown>{note.content}</Markdown>
                 </div>

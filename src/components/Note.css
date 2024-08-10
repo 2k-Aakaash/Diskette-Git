@@ -1,11 +1,21 @@
+/* Ensure the parent container uses a flex or grid layout */
+.note-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Adjust spacing between cards */
+    justify-content: center; /* Center align the cards if needed */
+}
+
 .note-card {
     position: relative;
-    width: calc(33.33% - 20px); /* Adjust the width for a 3-column layout with some spacing */
-    margin: 10px;
+    width: 350px; /* Fixed width */
+    max-width: calc(100% - 20px); /* Ensure it fits within the container */
     padding: 15px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.3s ease-in-out;
+    touch-action: manipulation; /* Optimize touch interactions */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
 }
 
 @media (max-width: 768px) {
@@ -16,7 +26,7 @@
 
 @media (max-width: 480px) {
     .note-card {
-        width: 100%; /* Single column layout for smaller screens */
+        width: calc(100% - 20px); /* Single column layout for smaller screens */
     }
 }
 
@@ -71,6 +81,7 @@
     border: none;
     font-size: 18px;
     cursor: pointer;
+    z-index: 1;
 }
 
 .note-card:hover {
@@ -79,4 +90,12 @@
 
 .note-card:hover .overlay {
     opacity: 1;
+}
+
+.overlay button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
 }
