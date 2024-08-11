@@ -6,6 +6,8 @@ import './Sidebar.css';
 import disketteIcon from '../assets/edit-icon.svg';
 import reminderIcon from '../assets/Notification-icon.svg';
 import settingsIcon from '../assets/Settings-icon.svg';
+import archiveIcon from '../assets/archive-icon.svg'; // Import archive icon
+import trashIcon from '../assets/trash-icon.svg'; // Import trash icon
 
 const Sidebar = ({ open }) => {
     const location = useLocation();
@@ -16,6 +18,14 @@ const Sidebar = ({ open }) => {
                 <div className={`sidebar-item ${location.pathname === '/Diskette' ? 'active' : ''}`}>
                     <img src={disketteIcon} alt="Diskette Icon" className="icon" />
                     <span className="text">Diskettes</span>
+                </div>
+                <div className="sidebar-item">
+                    <img src={archiveIcon} alt="Archive Icon" className="icon" />
+                    <span className="text">Archived</span>
+                </div>
+                <div className="sidebar-item">
+                    <img src={trashIcon} alt="Trash Icon" className="icon" />
+                    <span className="text">Bin</span>
                 </div>
                 <div className="sidebar-item">
                     <img src={reminderIcon} alt="Reminder Icon" className="icon" />
