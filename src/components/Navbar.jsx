@@ -33,7 +33,7 @@ const Search = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     padding: '0 10px',
-    width: '30ch', // Shorten the width
+    width: '30ch',
 }));
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
@@ -68,6 +68,9 @@ const CustomAppBar = styled(AppBar)(({ theme }) => ({
     margin: '10px',
     width: 'auto',
     boxShadow: 'none',
+    position: 'sticky', // Make the navbar sticky
+    top: "10px", // Position at the top
+    zIndex: 1100, // Ensure it stays above other content
 }));
 
 const Navbar = () => {
