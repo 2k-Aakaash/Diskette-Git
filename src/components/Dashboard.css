@@ -2,11 +2,12 @@
     /* display: grid;
     grid-template-columns: auto 1fr; */
     height: 100vh;
+    display: flex;
     transition: all 0.3s ease;
 }
 
 .sidebar-open .sidebar-container {
-    transform: translateX(0);
+    transform: translateX(10px);
 }
 
 .sidebar-closed .sidebar-container {
@@ -19,11 +20,12 @@
 
 .sidebar-closed .main-content {
     margin-left: 0;
+    width: 100%; /* Full width when sidebar is closed */
 }
 
 .main-content {
     padding: 20px;
-    transition: margin-left 0.5s cubic-bezier(1, 0, 0, 1);
+    transition: all 0.5s cubic-bezier(1, 0, 0, 1);
     position: relative;
     width: 100%; /* Ensure it takes full width */
 }

@@ -31,7 +31,7 @@ const Dashboard = ({ notes, onCreateNote, onDragEnd, onEditNote, onDeleteNote, o
     const regularNotes = notes.filter(note => !note.isPriority);
 
     return (
-        <div className={`dashboard-container ${sidebarOpen ? 'sidebar-open' : ''}`}>
+        <div className={`dashboard-container ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
             <Sidebar open={sidebarOpen} />
             <div className="main-content">
                 {loading ? (

@@ -1,30 +1,33 @@
-/* Ensure the parent container uses a flex or grid layout */
+/* Container for note cards */
 .note-container {
     display: flex;
     flex-wrap: wrap;
-    gap: 30px; /* Adjust spacing between cards */
-    justify-content: center; /* Center align the cards if needed */
+    gap: 30px; /* Spacing between cards */
+    justify-content: center; /* Center align the cards */
 }
 
+/* General note card styling */
 .note-card {
     position: relative;
-    width: 100%; /* Allow the card to take full width of its container */
+    width: 100%; /* Take full width of container */
     max-width: 350px; /* Fixed maximum width */
-    height: 210px; /* Fixed height for all cards */
+    height: 210px; /* Fixed height */
     padding: 20px 10px 10px 20px;
     border-radius: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.3s ease-in-out;
     touch-action: manipulation; /* Optimize touch interactions */
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    box-sizing: border-box; /* Include padding and border in element's total width and height */
     flex: 1 1 300px; /* Allow cards to grow and shrink with a minimum width */
     overflow: hidden; /* Hide overflow content */
+    background-color: var(--note-color, #fff); /* Dynamic background color */
 }
 
-.note-card h1{
+.note-card h1 {
     margin: 0;
 }
 
+/* Adjust grid for different screen sizes */
 @media (min-width: 769px) {
     .note-container {
         display: grid;
@@ -45,6 +48,7 @@
     }
 }
 
+/* Card content styling */
 .card-content {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -68,6 +72,7 @@
     text-overflow: ellipsis;
 }
 
+/* Timestamp styling */
 .timestamp {
     position: absolute;
     bottom: 10px;
@@ -76,6 +81,7 @@
     color: rgba(0, 0, 0, 0.6);
 }
 
+/* Overlay for note operations (edit, delete, etc.) */
 .overlay {
     position: absolute;
     bottom: 0;
@@ -89,10 +95,12 @@
     transition: opacity 0.3s ease-in-out;
 }
 
+/* Show overlay on hover for larger screens */
 .overlay.visible {
     opacity: 1;
 }
 
+/* More options button for smaller screens */
 .more-options {
     position: absolute;
     top: 10px;
@@ -104,18 +112,27 @@
     z-index: 1;
 }
 
+/* Hover effect for note cards */
 .note-card:hover {
     box-shadow: 0 2px 22px rgba(0, 0, 0, 0.65);
 }
 
+/* Hover effect for overlay on larger screens */
 .note-card:hover .overlay {
     opacity: 1;
 }
 
+/* Button styling inside overlay */
 .overlay button {
     background: none;
     border: none;
     color: white;
-    font-size: 16px;
     cursor: pointer;
+    padding: 5px;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.overlay button:hover {
+    color: #db6eff; /* Optional: Add hover color for icons */
 }

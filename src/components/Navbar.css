@@ -8,3 +8,8 @@
     }
 }
 
+@media screen and (min-width: 600px) {
+    .css-n3793s-MuiInputBase-root{
+        width: 100px !important;
+    }
+}
