@@ -136,3 +136,29 @@
 .overlay button:hover {
     color: #db6eff; /* Optional: Add hover color for icons */
 }
+
+.horizontal-scroll {
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: thin;
+}
+
+.horizontal-scroll::-webkit-scrollbar {
+    height: 8px;
+}
+
+.horizontal-scroll::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+}
+
+.horizontal-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+/* Change scroll direction when mouse is over Priority Diskettes */
+.horizontal-scroll:hover {
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+

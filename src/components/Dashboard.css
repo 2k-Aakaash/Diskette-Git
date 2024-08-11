@@ -1,6 +1,4 @@
 .dashboard-container {
-    /* display: grid;
-    grid-template-columns: auto 1fr; */
     height: 100vh;
     display: flex;
     transition: all 0.3s ease;
@@ -16,6 +14,7 @@
 
 .sidebar-open .main-content {
     margin-left: 250px; /* Adjust based on sidebar width */
+    width: calc(100% - 250px); /* Adjust the width of main content when sidebar is open */
 }
 
 .sidebar-closed .main-content {
@@ -35,6 +34,30 @@
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 30px;
     margin-top: 20px;
+}
+
+/* Ensure horizontal scrolling for Priority Diskette section */
+.notes-grid.horizontal-scroll {
+    display: flex;
+    overflow-x: auto;
+    padding: 16px; /* Adjust padding to make space for box-shadow */
+    gap: 16px; /* Gap between notes */
+    white-space: nowrap; /* Prevent wrapping of cards */
+}
+
+/* Ensure all note cards in Priority Diskette have the same width */
+.priority-note {
+    width: 300px; /* Fixed width for Priority Diskette cards */
+    flex-shrink: 0; /* Prevents the card from shrinking */
+    padding: 16px; /* Padding inside notes */
+    margin: 0 8px; /* Margin between notes */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Example box-shadow */
+}
+
+.note {
+    padding: 16px; /* Padding inside notes */
+    margin: 0 8px; /* Margin between notes */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* Example box-shadow */
 }
 
 @media (max-width: 768px) {
@@ -119,7 +142,6 @@
     margin-top: 20px;
 }
 
-/* Keep the existing Priority Diskette text styling */
 .priority-diskette {
     margin-left: 60px;
     display: inline;

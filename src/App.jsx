@@ -172,12 +172,41 @@ const App = () => {
     setNotes(updatedNotes);
   };
 
-  const handleDragEnd = (result) => {
+  const updateNote = async (noteId, updatedData) => {
+    if (user) {
+      const noteRef = doc(db, 'notes', noteId);
+      try {
+        await updateDoc(noteRef, updatedData);
+      } catch (error) {
+        console.error('Error updating note:', error);
+      }
+    }
+  };
+
+  const handleDragEnd = async (result) => {
     if (!result.destination) return;
     const reorderedNotes = Array.from(notes);
     const [removed] = reorderedNotes.splice(result.source.index, 1);
     reorderedNotes.splice(result.destination.index, 0, removed);
+
+    // Update notes in Firestore
+    for (let i = 0; i < reorderedNotes.length; i++) {
+      const note = reorderedNotes[i];
+      await updateNote(note.id, { order: i });
+    }
+
     setNotes(reorderedNotes);
+  };
+
+  const handleUpdateNote = async (noteId, updatedData) => {
+    if (user) {
+      const noteRef = doc(db, 'notes', noteId);
+      try {
+        await updateDoc(noteRef, updatedData);
+      } catch (error) {
+        console.error('Error updating note:', error);
+      }
+    }
   };
 
   return (
@@ -200,6 +229,7 @@ const App = () => {
             onPinNote={handlePinNote}
             onExportNote={handleExportNote}
             onChangeColor={handleChangeColor}
+            onUpdateNote={handleUpdateNote}
             onSignIn={handleGoogleSignIn}
             onSignOut={handleSignOut}
             customColors={customColors}

@@ -5,7 +5,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Sidebar from './Sidebar';
 import hamburgerIcon from '../assets/menu-icon.png';
 
-const Dashboard = ({ notes, onCreateNote, onDragEnd, onEditNote, onDeleteNote, onArchiveNote, onPinNote, onExportNote, onChangeColor }) => {
+const Dashboard = ({ notes, onCreateNote, onEditNote, onDeleteNote, onArchiveNote, onPinNote, onExportNote, onChangeColor, onUpdateNote }) => {
     const [loading, setLoading] = useState(true);
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -30,6 +30,37 @@ const Dashboard = ({ notes, onCreateNote, onDragEnd, onEditNote, onDeleteNote, o
     const priorityNotes = notes.filter(note => note.isPriority);
     const regularNotes = notes.filter(note => !note.isPriority);
 
+    const handleDragEnd = async (result) => {
+        if (!result.destination) return;
+
+        const reorderedNotes = Array.from(notes);
+        const [removed] = reorderedNotes.splice(result.source.index, 1);
+        reorderedNotes.splice(result.destination.index, 0, removed);
+
+        // Call onUpdateNote to update the order of notes
+        try {
+            for (const note of reorderedNotes) {
+                await onUpdateNote(note.id, note);
+            }
+        } catch (error) {
+            console.error('Error updating notes:', error);
+        }
+    };
+
+    // Function to toggle priority
+    const handlePriorityToggle = async (noteId) => {
+        const updatedNote = notes.find(note => note.id === noteId);
+        if (!updatedNote) return;
+
+        updatedNote.isPriority = !updatedNote.isPriority;
+
+        try {
+            await onUpdateNote(noteId, updatedNote);
+        } catch (error) {
+            console.error('Error updating note priority:', error);
+        }
+    };
+
     return (
         <div className={`dashboard-container ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
             <Sidebar open={sidebarOpen} />
@@ -45,10 +76,14 @@ const Dashboard = ({ notes, onCreateNote, onDragEnd, onEditNote, onDeleteNote, o
                         </button>
 
                         <h1 className="section-title priority-diskette">Priority Diskettes</h1>
-                        <DragDropContext onDragEnd={onDragEnd}>
+                        <DragDropContext onDragEnd={handleDragEnd}>
                             <Droppable droppableId="priorityNotes" direction="horizontal">
                                 {(provided) => (
-                                    <div className="notes-grid horizontal-scroll" ref={provided.innerRef} {...provided.droppableProps}>
+                                    <div
+                                        className="notes-grid horizontal-scroll"
+                                        ref={provided.innerRef}
+                                        {...provided.droppableProps}
+                                    >
                                         {priorityNotes.length === 0 ? (
                                             <div className="empty-notes-container">
                                                 <div className="empty-notes-card centered-empty-message">
@@ -72,6 +107,7 @@ const Dashboard = ({ notes, onCreateNote, onDragEnd, onEditNote, onDeleteNote, o
                                                                 onPin={onPinNote}
                                                                 onExport={onExportNote}
                                                                 onChangeColor={onChangeColor}
+                                                                onPriorityToggle={handlePriorityToggle} // Pass the function
                                                             />
                                                         </div>
                                                     )}
@@ -82,10 +118,8 @@ const Dashboard = ({ notes, onCreateNote, onDragEnd, onEditNote, onDeleteNote, o
                                     </div>
                                 )}
                             </Droppable>
-                        </DragDropContext>
 
-                        <h1 className="section-title">Diskettes</h1>
-                        <DragDropContext onDragEnd={onDragEnd}>
+                            <h1 className="section-title">Diskettes</h1>
                             <Droppable droppableId="regularNotes">
                                 {(provided) => (
                                     <div className="notes-grid" ref={provided.innerRef} {...provided.droppableProps}>
@@ -107,6 +141,7 @@ const Dashboard = ({ notes, onCreateNote, onDragEnd, onEditNote, onDeleteNote, o
                                                             {...provided.dragHandleProps}
                                                         >
                                                             <Note
+                                                                className={note.isPriority ? 'priority-note' : ''}
                                                                 note={note}
                                                                 onEdit={onEditNote}
                                                                 onDelete={onDeleteNote}
@@ -114,6 +149,7 @@ const Dashboard = ({ notes, onCreateNote, onDragEnd, onEditNote, onDeleteNote, o
                                                                 onPin={onPinNote}
                                                                 onExport={onExportNote}
                                                                 onChangeColor={onChangeColor}
+                                                                onPriorityToggle={handlePriorityToggle} // Pass the function
                                                             />
                                                         </div>
                                                     )}

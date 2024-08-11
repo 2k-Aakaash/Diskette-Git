@@ -8,11 +8,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import PushPinIcon from '@mui/icons-material/PushPin';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import PaletteIcon from '@mui/icons-material/Palette';
+import StarIcon from '@mui/icons-material/Star'; // New icon for priority
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import './Note.css';
 
-const Note = ({ note, onEdit, onDelete, onArchive, onPin, onExport, onChangeColor }) => {
+const Note = ({ note, onEdit, onDelete, onArchive, onPin, onExport, onPriorityToggle }) => {
     const navigate = useNavigate();
     const [overlayVisible, setOverlayVisible] = useState(false);
 
@@ -67,22 +67,24 @@ const Note = ({ note, onEdit, onDelete, onArchive, onPin, onExport, onChangeColo
                     <button onClick={() => onArchive(note.id)}><ArchiveIcon /></button>
                     <button onClick={() => onPin(note.id)}><PushPinIcon /></button>
                     <button onClick={() => onExport(note.id)}><FileDownloadIcon /></button>
-                    <button onClick={() => onChangeColor(note.id)}><PaletteIcon /></button>
+                    <button onClick={() => onPriorityToggle(note.id)}><StarIcon /></button> {/* New button for priority */}
                 </div>
             ) : (
-                <button className="more-options" onClick={toggleOverlayVisibility}>
-                    <MoreVertIcon />
-                </button>
-            )}
-            {window.innerWidth < 480 && overlayVisible && (
-                <div className="overlay" onClick={(event) => event.stopPropagation()}>
-                    <button onClick={() => onEdit(note.id)}><EditIcon /></button>
-                    <button onClick={() => onDelete(note.id)}><DeleteIcon /></button>
-                    <button onClick={() => onArchive(note.id)}><ArchiveIcon /></button>
-                    <button onClick={() => onPin(note.id)}><PushPinIcon /></button>
-                    <button onClick={() => onExport(note.id)}><FileDownloadIcon /></button>
-                    <button onClick={() => onChangeColor(note.id)}><PaletteIcon /></button>
-                </div>
+                <>
+                    <button className="more-options" onClick={toggleOverlayVisibility}>
+                        <MoreVertIcon />
+                    </button>
+                    {overlayVisible && (
+                        <div className="overlay" onClick={(event) => event.stopPropagation()}>
+                            <button onClick={() => onEdit(note.id)}><EditIcon /></button>
+                            <button onClick={() => onDelete(note.id)}><DeleteIcon /></button>
+                            <button onClick={() => onArchive(note.id)}><ArchiveIcon /></button>
+                            <button onClick={() => onPin(note.id)}><PushPinIcon /></button>
+                            <button onClick={() => onExport(note.id)}><FileDownloadIcon /></button>
+                            <button onClick={() => onPriorityToggle(note.id)}><StarIcon /></button> {/* New button for priority */}
+                        </div>
+                    )}
+                </>
             )}
         </div>
     );
