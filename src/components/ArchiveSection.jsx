@@ -1,18 +1,22 @@
-// src/components/ArchiveSection.jsx
 import React from 'react';
-import { Grid } from '@mui/material';
-import Note from './Note';
+import NoteCard from './Note';
+import './ArchiveSection.css';
 
-const ArchiveSection = ({ archivedNotes, onUnarchive }) => {
+const ArchiveSection = ({ archivedNotes, onUnarchive, customColors }) => {
     return (
-        <div style={{ padding: '20px' }}>
-            <Grid container spacing={2}>
+        <div className="archive-section">
+            <h2 className="archive-title" style={{ color: customColors.noteText }}>Archived Diskettes</h2>
+            <div className="archive-notes-container">
                 {archivedNotes.map(note => (
-                    <Grid item xs={12} sm={6} md={4} key={note.id}>
-                        <Note note={note} onUnarchive={onUnarchive} />
-                    </Grid>
+                    <NoteCard
+                        key={note.id}
+                        note={note}
+                        onUnarchive={onUnarchive}
+                        isArchived
+                        customColors={customColors}
+                    />
                 ))}
-            </Grid>
+            </div>
         </div>
     );
 };
