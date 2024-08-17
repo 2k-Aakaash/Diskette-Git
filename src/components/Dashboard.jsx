@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './Dashboard.css';
+import '../index.css';
 import Note from './Note';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Sidebar from './Sidebar';
+import { useTheme } from '../ThemeContext';
 import hamburgerIcon from '../assets/menu-icon.png';
 
 const Dashboard = ({ notes, onCreateNote, onEditNote, onDeleteNote, onArchiveNote, onPinNote, onExportNote, onChangeColor, onUpdateNote }) => {

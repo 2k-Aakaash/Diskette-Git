@@ -42,6 +42,12 @@ const ThemeContextProvider = ({ children }) => {
         }
     }, [user]);
 
+    useEffect(() => {
+        // Add or remove the theme class from body when mode changes
+        document.body.classList.toggle('dark-mode', mode === 'dark');
+        document.body.classList.toggle('light-mode', mode === 'light');
+    }, [mode]);
+
     const toggleTheme = async () => {
         const newMode = mode === 'light' ? 'dark' : 'light';
         setMode(newMode);
@@ -52,7 +58,6 @@ const ThemeContextProvider = ({ children }) => {
                 await setDoc(userPreferencesRef, { theme: newMode }, { merge: true });
             } catch (error) {
                 console.error("Error updating theme: ", error);
-                // Optionally, handle specific error cases or user notifications here
             }
         } else {
             console.log("User is not authenticated");
