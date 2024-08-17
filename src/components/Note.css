@@ -6,7 +6,13 @@
     justify-content: center; /* Center align the cards */
 }
 
-/* General note card styling */
+/* Define box-shadow colors for light and dark modes */
+:root {
+    --note-card-box-shadow-light: 0 0px 20px rgba(0, 0, 0, 0.411);
+    --note-card-box-shadow-dark: 0 0px 25px rgba(255, 255, 255, 0.479); /* White shadow for dark mode */
+}
+
+/* Note card styling */
 .note-card {
     position: relative;
     width: 100%; /* Take full width of container */
@@ -14,13 +20,21 @@
     height: 210px; /* Fixed height */
     padding: 20px 10px 10px 20px;
     border-radius: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.3s ease-in-out;
     touch-action: manipulation; /* Optimize touch interactions */
     box-sizing: border-box; /* Include padding and border in element's total width and height */
     flex: 1 1 300px; /* Allow cards to grow and shrink with a minimum width */
     overflow: hidden; /* Hide overflow content */
     background-color: var(--note-color, #fff); /* Dynamic background color */
+}
+
+.note-card:hover{
+    box-shadow: var(--note-card-box-shadow-light);
+}
+
+/* Dark mode adjustments */
+body.dark-mode .note-card:hover {
+    box-shadow: var(--note-card-box-shadow-dark); /* Change box-shadow color for dark mode */
 }
 
 .note-card h1 {
