@@ -8,10 +8,10 @@ import EditNote from './components/EditNote';
 import DeleteConfirmationModal from './components/DeleteConfirmationModal';
 import ArchiveSection from './components/ArchiveSection';
 import ExportNote from './components/ExportNote';
-import { auth, provider, signInWithPopup, signOut, db } from './firebaseConfig'; // Import updated methods
-import { onSnapshot, query, collection, where, addDoc, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { auth, provider, signInWithPopup, signOut, db } from './firebaseConfig';
+import { onSnapshot, query, collection, where, addDoc, doc, updateDoc, deleteDoc, getDoc, setDoc } from 'firebase/firestore';
+import { useTheme } from './ThemeContext'; // Import theme context
 
-// Define custom colors
 const customColors = {
   navbarBackground: 'rgb(68, 49, 102)', // Navbar background color
   navbarText: 'rgb(255, 255, 255)', // Navbar text color
@@ -34,6 +34,8 @@ const App = () => {
   const [noteToExport, setNoteToExport] = useState(null);
   const [isExportNoteOpen, setIsExportNoteOpen] = useState(false);
 
+  const { theme, toggleTheme } = useTheme(); // Get theme and toggle function
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
@@ -48,16 +50,53 @@ const App = () => {
 
   useEffect(() => {
     if (user) {
-      const q = query(collection(db, 'notes'), where('userId', '==', user.uid));
-      const unsubscribe = onSnapshot(q, (snapshot) => {
-        const notesData = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-        setNotes(notesData);
-      });
-      return () => unsubscribe();
+      const fetchNotes = async () => {
+        const q = query(collection(db, 'notes'), where('userId', '==', user.uid));
+        const unsubscribe = onSnapshot(q, (snapshot) => {
+          const notesData = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+          setNotes(notesData);
+        });
+        return () => unsubscribe();
+      };
+
+      // const fetchTheme = async () => {
+      //   try {
+      //     const themeDoc = doc(db, 'users', user.uid);
+      //     const docSnap = await getDoc(themeDoc);
+      //     if (docSnap.exists()) {
+      //       const userTheme = docSnap.data().theme || 'light';
+      //       if (userTheme !== theme) {
+      //         toggleTheme();
+      //       }
+      //     } else {
+      //       // Handle case where document does not exist
+      //       console.log('No such document!');
+      //     }
+      //   } catch (error) {
+      //     console.error('Error fetching theme:', error);
+      //   }
+      // };
+
+      const updateUserTheme = async (theme) => {
+        if (user) {
+          const userRef = doc(db, 'users', user.uid);
+          try {
+            await updateDoc(userRef, { theme });
+          } catch (error) {
+            console.error('Error updating theme:', error);
+          }
+        }
+      };
+
+
+
+
+      fetchNotes();
+      // fetchTheme();
     } else {
       setNotes([]);
     }
-  }, [user]);
+  }, [user, toggleTheme, theme]);
 
   const handleGoogleSignIn = async () => {
     try {
