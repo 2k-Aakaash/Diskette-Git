@@ -68,7 +68,7 @@ body.dark-mode .section-title {
     position: relative;
     width: 100%;
     overflow-y: auto;
-    height: 100vh; /* Fill the viewport height */
+    height: 90dvh; /* Fill the viewport height */
     scrollbar-width: thin;
     scrollbar-color: var(--color-400) var(--color-200);
 }
