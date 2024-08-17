@@ -29,6 +29,14 @@ const Dashboard = ({ notes, onCreateNote, onEditNote, onDeleteNote, onArchiveNot
         };
 
         fetchData();
+
+        // Prevent body from scrolling
+        document.body.style.overflowY = 'hidden';
+
+        return () => {
+            // Reset body overflow on unmount
+            document.body.style.overflowY = 'auto';
+        };
     }, []);
 
     const priorityNotes = notes.filter(note => note.isPriority);
@@ -51,7 +59,6 @@ const Dashboard = ({ notes, onCreateNote, onEditNote, onDeleteNote, onArchiveNot
         }
     };
 
-    // Function to toggle priority
     const handlePriorityToggle = async (noteId) => {
         const updatedNote = notes.find(note => note.id === noteId);
         if (!updatedNote) return;
