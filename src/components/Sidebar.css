@@ -25,7 +25,7 @@
 
 .sidebar-item {
     background-color: #F0CCFF; /* Default button background color */
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     padding: 10px;
     border-radius: 12px; /* Button rounded corners */
     display: flex;
