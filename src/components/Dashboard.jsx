@@ -4,12 +4,14 @@ import '../index.css';
 import Note from './Note';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Sidebar from './Sidebar';
-import { useTheme } from '../ThemeContext';
-import hamburgerIcon from '../assets/menu-icon.png';
+import menuDark from '../assets/menu-dark.svg'; // Corrected path
+import menuLight from '../assets/menu-light.svg'; // Corrected path
+import { useTheme } from '../ThemeContext'; // Import the theme context
 
 const Dashboard = ({ notes, onCreateNote, onEditNote, onDeleteNote, onArchiveNote, onPinNote, onExportNote, onChangeColor, onUpdateNote }) => {
     const [loading, setLoading] = useState(true);
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const { mode } = useTheme(); // Get the current mode from the theme context
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
@@ -73,11 +75,13 @@ const Dashboard = ({ notes, onCreateNote, onEditNote, onDeleteNote, onArchiveNot
                     </div>
                 ) : (
                     <>
-                        <button className="hamburger-button" onClick={toggleSidebar}>
-                            <img src={hamburgerIcon} alt="Menu" />
-                        </button>
+                        <div className='priority-diskette-container'>
+                            <button className="menu-button" onClick={toggleSidebar}>
+                                <img src={mode === 'dark' ? menuDark : menuLight} alt="Menu" />
+                            </button>
 
-                        <h1 className="section-title priority-diskette">Priority Diskettes</h1>
+                            <h1 className="section-title priority-diskette">Priority Diskettes</h1>
+                        </div>
                         <DragDropContext onDragEnd={handleDragEnd}>
                             <Droppable droppableId="priorityNotes" direction="horizontal">
                                 {(provided) => (

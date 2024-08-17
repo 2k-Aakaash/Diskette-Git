@@ -37,7 +37,6 @@ body.dark-mode .section-title {
     color: var(--section-title-dark);
 }
 
-
 .dashboard-container {
     height: 100vh;
     display: flex;
@@ -69,18 +68,30 @@ body.dark-mode .section-title {
     width: 100%; /* Ensure it takes full width */
 }
 
+.menu-button{
+    background: none;
+    border: 0 solid transparent;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+    margin-top: 5px;
+}
+
+.menu-button img{
+    scale: 0.75;
+}
+
 .notes-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 30px;
-    margin-top: 20px;
 }
 
 /* Ensure horizontal scrolling for Priority Diskette section */
 .notes-grid.horizontal-scroll {
     display: flex;
     overflow-x: auto;
-    padding: 16px; /* Adjust padding to make space for box-shadow */
+    padding: 22px; /* Adjust padding to make space for box-shadow */
     gap: 16px; /* Gap between notes */
     white-space: nowrap; /* Prevent wrapping of cards */
 }
@@ -182,6 +193,12 @@ body.dark-mode .section-title {
 }
 
 .priority-diskette {
-    margin-left: 60px;
+    margin-left: 10px;
     display: inline;
+}
+
+.priority-diskette-container{
+    display: flex;
+    justify-content: left;
+    margin-top: -25px;
 }
