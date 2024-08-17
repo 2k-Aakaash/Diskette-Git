@@ -88,9 +88,6 @@ const App = () => {
         }
       };
 
-
-
-
       fetchNotes();
       // fetchTheme();
     } else {

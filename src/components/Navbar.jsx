@@ -74,7 +74,7 @@ const CustomAppBar = styled(AppBar)(({ theme }) => ({
 }));
 
 const Navbar = () => {
-    const { theme, toggleTheme } = useTheme();
+    const { mode, toggleTheme } = useTheme();
     const [profileOpen, setProfileOpen] = useState(false);
 
     const handleProfileClick = () => {
@@ -85,13 +85,22 @@ const Navbar = () => {
         setProfileOpen(false);
     };
 
+    // console.log("Current Theme Mode:", mode); // Debugging line
+
     return (
         <CustomAppBar position="static">
             <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <img src={theme === 'dark' ? logoDark : logoLight} alt="Diskette Logo" style={{ height: '30px', marginRight: '10px' }} />
+                <img
+                    src={mode === 'dark' ? logoDark : logoLight}
+                    alt="Diskette Logo"
+                    style={{ height: '30px', marginRight: '10px' }}
+                />
                 <Search>
                     <SearchIconWrapper>
-                        <img src={theme === 'dark' ? searchIconDark : searchIconLight} alt="Search Icon" />
+                        <img
+                            src={mode === 'dark' ? searchIconDark : searchIconLight}
+                            alt="Search Icon"
+                        />
                     </SearchIconWrapper>
                     <StyledInputBase
                         placeholder="Search Diskettes…"
@@ -100,7 +109,11 @@ const Navbar = () => {
                 </Search>
                 <div>
                     <IconButton color="inherit" onClick={toggleTheme}>
-                        <img src={theme === 'dark' ? darkModeIconDark : darkModeIconLight} alt="Theme Toggle Icon" style={{ width: '24px', height: '24px' }} />
+                        <img
+                            src={mode === 'dark' ? darkModeIconDark : darkModeIconLight}
+                            alt="Theme Toggle Icon"
+                            style={{ width: '24px', height: '24px' }}
+                        />
                     </IconButton>
                     <IconButton
                         size="large"
@@ -108,7 +121,11 @@ const Navbar = () => {
                         color="inherit"
                         onClick={handleProfileClick}
                     >
-                        <img src={theme === 'dark' ? profileIconDark : profileIconLight} alt="Profile Icon" style={{ width: '20px', height: '20px' }} />
+                        <img
+                            src={mode === 'dark' ? profileIconDark : profileIconLight}
+                            alt="Profile Icon"
+                            style={{ width: '20px', height: '20px' }}
+                        />
                     </IconButton>
                 </div>
             </Toolbar>
