@@ -52,16 +52,29 @@ const App = () => {
     if (user) {
       const fetchNotes = async () => {
         const q = query(collection(db, 'notes'), where('userId', '==', user.uid));
+        const archivedQuery = query(collection(db, 'notes'), where('userId', '==', user.uid), where('archived', '==', true));
+
         const unsubscribe = onSnapshot(q, (snapshot) => {
           const notesData = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
           setNotes(notesData);
         });
-        return () => unsubscribe();
+
+        const archivedUnsubscribe = onSnapshot(archivedQuery, (snapshot) => {
+          const archivedData = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+          setArchivedNotes(archivedData);
+        });
+
+
+        return () => {
+          unsubscribe();
+          archivedUnsubscribe();
+        };
       };
 
       fetchNotes();
     } else {
       setNotes([]);
+      setArchivedNotes([]);
     }
   }, [user]);
 
@@ -151,33 +164,58 @@ const App = () => {
 
   const handleArchiveNote = async (noteId) => {
     if (user) {
-      const note = notes.find(n => n.id === noteId);
+      const note = notes.find((n) => n.id === noteId);
+      if (!note) return; // Early return if note is not found
+
       const noteRef = doc(db, 'notes', noteId);
 
       try {
+        // Update the note in Firestore to mark it as archived
         await updateDoc(noteRef, { archived: true });
-        setArchivedNotes([...archivedNotes, note]);
-        setNotes(notes.filter(n => n.id !== noteId));
+
+        // Remove the note from the notes array
+        setNotes((prevNotes) => prevNotes.filter((n) => n.id !== noteId));
+
+        // Add the note to the archivedNotes array
+        setArchivedNotes((prevArchivedNotes) => {
+          if (!prevArchivedNotes.some(n => n.id === noteId)) {
+            return [...prevArchivedNotes, note];
+          }
+          return prevArchivedNotes;
+        });
+
       } catch (error) {
         console.error('Error archiving note:', error);
       }
     }
   };
 
+
+
+
   const handleUnarchiveNote = async (noteId) => {
     if (user) {
-      const note = archivedNotes.find(n => n.id === noteId);
+      const note = archivedNotes.find((n) => n.id === noteId);
+      if (!note) return;
+
       const noteRef = doc(db, 'notes', noteId);
 
       try {
+        // Update the note in Firestore to mark it as unarchived
         await updateDoc(noteRef, { archived: false });
-        setNotes([...notes, note]);
-        setArchivedNotes(archivedNotes.filter(n => n.id !== noteId));
+
+        // Remove the note from the archivedNotes array
+        setArchivedNotes((prevArchivedNotes) => prevArchivedNotes.filter((n) => n.id !== noteId));
+
+        // Add the note back to the notes array
+        setNotes((prevNotes) => [...prevNotes, note]);
+
       } catch (error) {
         console.error('Error unarchiving note:', error);
       }
     }
   };
+
 
   const handlePinNote = (noteId) => {
     const updatedNotes = notes.map(note => note.id === noteId ? { ...note, pinned: !note.pinned } : note);

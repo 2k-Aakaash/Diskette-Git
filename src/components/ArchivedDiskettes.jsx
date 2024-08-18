@@ -17,6 +17,7 @@ const ArchivedDiskettes = ({ archivedNotes, onRestoreNote, onDeleteNote, onUpdat
     useEffect(() => {
         const fetchData = async () => {
             try {
+                // Simulating a fetch with a delay for demonstration
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 setLoading(false);
             } catch (error) {
@@ -27,8 +28,10 @@ const ArchivedDiskettes = ({ archivedNotes, onRestoreNote, onDeleteNote, onUpdat
 
         fetchData();
 
+        // Disable scrolling while loading
         document.body.style.overflowY = 'hidden';
 
+        // Re-enable scrolling when component unmounts
         return () => {
             document.body.style.overflowY = 'auto';
         };

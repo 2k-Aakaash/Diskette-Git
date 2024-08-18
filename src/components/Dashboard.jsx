@@ -158,7 +158,7 @@ const Dashboard = ({ notes, onCreateNote, onEditNote, onDeleteNote, onArchiveNot
                                                                 note={note}
                                                                 onEdit={onEditNote}
                                                                 onDelete={onDeleteNote}
-                                                                onArchive={onArchiveNote}
+                                                                onArchive={() => onArchiveNote(note.id)}
                                                                 onPin={onPinNote}
                                                                 onExport={onExportNote}
                                                                 onChangeColor={onChangeColor}
