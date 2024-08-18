@@ -6,10 +6,10 @@ import NoteDetails from './components/NoteDetails';
 import CreateNote from './components/CreateNote';
 import EditNote from './components/EditNote';
 import DeleteConfirmationModal from './components/DeleteConfirmationModal';
-import ArchiveSection from './components/ArchiveSection';
+import ArchiveSection from './components/ArchivedDiskettes';
 import ExportNote from './components/ExportNote';
 import { auth, provider, signInWithPopup, signOut, db } from './firebaseConfig';
-import { onSnapshot, query, collection, where, addDoc, doc, updateDoc, deleteDoc, getDoc, setDoc } from 'firebase/firestore';
+import { onSnapshot, query, collection, where, addDoc, doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { useTheme } from './ThemeContext'; // Import theme context
 
 const customColors = {
@@ -59,41 +59,11 @@ const App = () => {
         return () => unsubscribe();
       };
 
-      // const fetchTheme = async () => {
-      //   try {
-      //     const themeDoc = doc(db, 'users', user.uid);
-      //     const docSnap = await getDoc(themeDoc);
-      //     if (docSnap.exists()) {
-      //       const userTheme = docSnap.data().theme || 'light';
-      //       if (userTheme !== theme) {
-      //         toggleTheme();
-      //       }
-      //     } else {
-      //       // Handle case where document does not exist
-      //       console.log('No such document!');
-      //     }
-      //   } catch (error) {
-      //     console.error('Error fetching theme:', error);
-      //   }
-      // };
-
-      const updateUserTheme = async (theme) => {
-        if (user) {
-          const userRef = doc(db, 'users', user.uid);
-          try {
-            await updateDoc(userRef, { theme });
-          } catch (error) {
-            console.error('Error updating theme:', error);
-          }
-        }
-      };
-
       fetchNotes();
-      // fetchTheme();
     } else {
       setNotes([]);
     }
-  }, [user, toggleTheme, theme]);
+  }, [user]);
 
   const handleGoogleSignIn = async () => {
     try {
@@ -179,12 +149,34 @@ const App = () => {
     }
   };
 
-  const handleArchiveNote = (noteId) => {
-    // Logic for archiving a note
+  const handleArchiveNote = async (noteId) => {
+    if (user) {
+      const note = notes.find(n => n.id === noteId);
+      const noteRef = doc(db, 'notes', noteId);
+
+      try {
+        await updateDoc(noteRef, { archived: true });
+        setArchivedNotes([...archivedNotes, note]);
+        setNotes(notes.filter(n => n.id !== noteId));
+      } catch (error) {
+        console.error('Error archiving note:', error);
+      }
+    }
   };
 
-  const handleUnarchiveNote = (noteId) => {
-    // Logic for unarchiving a note
+  const handleUnarchiveNote = async (noteId) => {
+    if (user) {
+      const note = archivedNotes.find(n => n.id === noteId);
+      const noteRef = doc(db, 'notes', noteId);
+
+      try {
+        await updateDoc(noteRef, { archived: false });
+        setNotes([...notes, note]);
+        setArchivedNotes(archivedNotes.filter(n => n.id !== noteId));
+      } catch (error) {
+        console.error('Error unarchiving note:', error);
+      }
+    }
   };
 
   const handlePinNote = (noteId) => {
@@ -272,7 +264,7 @@ const App = () => {
           />
         } />
         <Route path="/note/:id" element={<NoteDetails notes={notes} customColors={customColors} />} />
-        <Route path="/profile/archive" element={<ArchiveSection archivedNotes={archivedNotes} onUnarchive={handleUnarchiveNote} customColors={customColors} />} />
+        <Route path="/Archived" element={<ArchiveSection archivedNotes={archivedNotes} onUnarchive={handleUnarchiveNote} customColors={customColors} />} />
       </Routes>
       <CreateNote open={isCreateNoteOpen} onClose={handleCloseCreateNote} onSave={handleSaveNote} />
       {noteToEdit && <EditNote open={isEditNoteOpen} onClose={() => setIsEditNoteOpen(false)} onSave={handleSaveEditedNote} note={noteToEdit} />}
