@@ -1,3 +1,5 @@
+// Old with CRUD of Diskette and Theme Context
+
 service cloud.firestore {
   match /databases/{database}/documents {
     match /notes/{noteId} {
@@ -7,6 +9,35 @@ service cloud.firestore {
       allow delete: if request.auth != null && request.auth.uid == resource.data.userId;
     }
 
+    match /userPreferences/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+  }
+}
+
+
+// New for Archived Diskette also
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Rules for managing notes
+    match /notes/{noteId} {
+      allow read: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow delete: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
+
+    // Rules for managing archived diskettes
+    match /archivedDiskettes/{disketteId} {
+      allow read: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null && request.auth.uid == resource.data.userId;
+      allow delete: if request.auth != null && request.auth.uid == resource.data.userId;
+    }
+
+    // Rules for user preferences (e.g., theme toggling)
     match /userPreferences/{userId} {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
