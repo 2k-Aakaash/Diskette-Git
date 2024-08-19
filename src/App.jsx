@@ -301,8 +301,15 @@ const App = () => {
             customColors={customColors}
           />
         } />
-        <Route path="/note/:id" element={<NoteDetails notes={notes} customColors={customColors} />} />
-        <Route path="/Archived" element={<ArchiveSection archivedNotes={archivedNotes} onUnarchive={handleUnarchiveNote} customColors={customColors} />} />
+        <Route path="/note/:id" element={<NoteDetails
+          notes={notes} customColors={customColors}
+        />} />
+        <Route path="/Archived" element={<ArchiveSection
+          archivedNotes={archivedNotes}
+          onUnarchive={handleUnarchiveNote}
+          onUpdateNote={handleUpdateNote}  // Add this line to pass the function
+          customColors={customColors}
+        />} />
       </Routes>
       <CreateNote open={isCreateNoteOpen} onClose={handleCloseCreateNote} onSave={handleSaveNote} />
       {noteToEdit && <EditNote open={isEditNoteOpen} onClose={() => setIsEditNoteOpen(false)} onSave={handleSaveEditedNote} note={noteToEdit} />}

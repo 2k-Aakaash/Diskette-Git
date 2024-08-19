@@ -57,6 +57,22 @@ const ArchivedDiskettes = ({ archivedNotes, onRestoreNote, onDeleteNote, onUpdat
         }
     };
 
+    const handleRestoreNote = async (noteId) => {
+        try {
+            const noteToRestore = archivedNotes.find(note => note.id === noteId);
+            if (!noteToRestore) {
+                console.error(`Note with ID ${noteId} not found in archived notes.`);
+                return;
+            }
+
+            await onUpdateNote(noteId, { ...noteToRestore, archived: false });
+
+            console.log(`Successfully restored note with ID ${noteId}`);
+        } catch (error) {
+            console.error(`Error restoring note with ID ${noteId}:`, error);
+        }
+    };
+
     return (
         <div className={`dashboard-container ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
             <Sidebar open={sidebarOpen} />
@@ -95,9 +111,9 @@ const ArchivedDiskettes = ({ archivedNotes, onRestoreNote, onDeleteNote, onUpdat
                                                         >
                                                             <Note
                                                                 note={note}
-                                                                onEdit={onRestoreNote}
+                                                                onEdit={handleRestoreNote}
                                                                 onDelete={onDeleteNote}
-                                                                onArchive={onRestoreNote} // Restore note from archive
+                                                                onArchive={handleRestoreNote} // Restore note from archive
                                                                 onPin={() => { }} // No pin action needed
                                                                 onExport={() => { }} // No export action needed
                                                             />
