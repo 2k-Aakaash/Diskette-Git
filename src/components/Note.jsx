@@ -8,7 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import PushPinIcon from '@mui/icons-material/PushPin';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import StarIcon from '@mui/icons-material/Star'; // New icon for priority
+import StarIcon from '@mui/icons-material/Star';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import './Note.css';
 
@@ -30,14 +30,14 @@ const Note = ({ note, onEdit, onDelete, onArchive, onPin, onExport, onPriorityTo
     };
 
     const toggleOverlayVisibility = (event) => {
-        event.stopPropagation(); // Prevent triggering handleCardClick
+        event.stopPropagation();
         setOverlayVisible(!overlayVisible);
     };
 
     const style = {
         transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
         transition,
-        backgroundColor: note.color, // Use dynamic color from note creation
+        backgroundColor: note.color,
     };
 
     return (
@@ -65,9 +65,9 @@ const Note = ({ note, onEdit, onDelete, onArchive, onPin, onExport, onPriorityTo
                     <button onClick={() => onEdit(note.id)}><EditIcon /></button>
                     <button onClick={() => onDelete(note.id)}><DeleteIcon /></button>
                     <button onClick={() => onArchive(note.id)}><ArchiveIcon /></button>
-                    <button onClick={() => onPin(note.id)}><PushPinIcon /></button>
-                    <button onClick={() => onExport(note.id)}><FileDownloadIcon /></button>
-                    <button onClick={() => onPriorityToggle(note.id)}><StarIcon /></button> {/* New button for priority */}
+                    {onPin && <button onClick={() => onPin(note.id)}><PushPinIcon /></button>}
+                    {onExport && <button onClick={() => onExport(note.id)}><FileDownloadIcon /></button>}
+                    {onPriorityToggle && <button onClick={() => onPriorityToggle(note.id)}><StarIcon /></button>}
                 </div>
             ) : (
                 <>
@@ -79,9 +79,9 @@ const Note = ({ note, onEdit, onDelete, onArchive, onPin, onExport, onPriorityTo
                             <button onClick={() => onEdit(note.id)}><EditIcon /></button>
                             <button onClick={() => onDelete(note.id)}><DeleteIcon /></button>
                             <button onClick={() => onArchive(note.id)}><ArchiveIcon /></button>
-                            <button onClick={() => onPin(note.id)}><PushPinIcon /></button>
-                            <button onClick={() => onExport(note.id)}><FileDownloadIcon /></button>
-                            <button onClick={() => onPriorityToggle(note.id)}><StarIcon /></button> {/* New button for priority */}
+                            {onPin && <button onClick={() => onPin(note.id)}><PushPinIcon /></button>}
+                            {onExport && <button onClick={() => onExport(note.id)}><FileDownloadIcon /></button>}
+                            {onPriorityToggle && <button onClick={() => onPriorityToggle(note.id)}><StarIcon /></button>}
                         </div>
                     )}
                 </>

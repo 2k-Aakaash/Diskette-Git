@@ -17,7 +17,6 @@ const ArchivedDiskettes = ({ archivedNotes, onRestoreNote, onDeleteNote, onUpdat
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Simulating a fetch with a delay for demonstration
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 setLoading(false);
             } catch (error) {
@@ -27,11 +26,7 @@ const ArchivedDiskettes = ({ archivedNotes, onRestoreNote, onDeleteNote, onUpdat
         };
 
         fetchData();
-
-        // Disable scrolling while loading
         document.body.style.overflowY = 'hidden';
-
-        // Re-enable scrolling when component unmounts
         return () => {
             document.body.style.overflowY = 'auto';
         };
@@ -113,9 +108,10 @@ const ArchivedDiskettes = ({ archivedNotes, onRestoreNote, onDeleteNote, onUpdat
                                                                 note={note}
                                                                 onEdit={handleRestoreNote}
                                                                 onDelete={onDeleteNote}
-                                                                onArchive={handleRestoreNote} // Restore note from archive
+                                                                onArchive={handleRestoreNote}
                                                                 onPin={() => { }} // No pin action needed
                                                                 onExport={() => { }} // No export action needed
+                                                                onPriorityToggle={() => { }} // No priority toggle action needed
                                                             />
                                                         </div>
                                                     )}
