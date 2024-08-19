@@ -67,7 +67,7 @@ const ArchivedDiskettes = ({ archivedNotes, onRestoreNote, onDeleteNote, onUpdat
 
             await onUpdateNote(noteId, { ...noteToRestore, archived: false });
 
-            console.log(`Successfully restored note with ID ${noteId}`);
+            // console.log(`Successfully restored note with ID ${noteId}`);
         } catch (error) {
             console.error(`Error restoring note with ID ${noteId}:`, error);
         }
