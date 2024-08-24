@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Sidebar from './Sidebar';
+import './Dashboard.css';
+import '../index.css';
 import Note from './Note';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import { useTheme } from '../ThemeContext';
-import './Dashboard.css';
+import Sidebar from './Sidebar';
 import menuDark from '../assets/menu-dark.svg';
 import menuLight from '../assets/menu-light.svg';
+import { useTheme } from '../ThemeContext';
 
+// Your ArchivedDiskettes component code here
 const ArchivedDiskettes = ({ archivedNotes, onRestoreNote, onDeleteNote, onUpdateNote }) => {
     const [loading, setLoading] = useState(true);
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -17,7 +19,6 @@ const ArchivedDiskettes = ({ archivedNotes, onRestoreNote, onDeleteNote, onUpdat
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Simulating a fetch with a delay for demonstration
                 await new Promise(resolve => setTimeout(resolve, 1000));
                 setLoading(false);
             } catch (error) {
@@ -28,10 +29,8 @@ const ArchivedDiskettes = ({ archivedNotes, onRestoreNote, onDeleteNote, onUpdat
 
         fetchData();
 
-        // Disable scrolling while loading
         document.body.style.overflowY = 'hidden';
 
-        // Re-enable scrolling when component unmounts
         return () => {
             document.body.style.overflowY = 'auto';
         };
@@ -67,7 +66,7 @@ const ArchivedDiskettes = ({ archivedNotes, onRestoreNote, onDeleteNote, onUpdat
 
             await onUpdateNote(noteId, { ...noteToRestore, archived: false });
 
-            // console.log(`Successfully restored note with ID ${noteId}`);
+            // Optionally: Remove the restored note from the archived notes list in the UI
         } catch (error) {
             console.error(`Error restoring note with ID ${noteId}:`, error);
         }
@@ -83,21 +82,25 @@ const ArchivedDiskettes = ({ archivedNotes, onRestoreNote, onDeleteNote, onUpdat
                     </div>
                 ) : (
                     <>
-                        <div className="priority-diskette-container">
+                        <div className='priority-diskette-container'>
                             <button className="menu-button" onClick={toggleSidebar}>
                                 <img src={mode === 'dark' ? menuDark : menuLight} alt="Menu" />
                             </button>
+
                             <h1 className="section-title">Archived Diskettes</h1>
                         </div>
                         <DragDropContext onDragEnd={handleDragEnd}>
                             <Droppable droppableId="archivedNotes">
                                 {(provided) => (
-                                    <div className="notes-grid" ref={provided.innerRef} {...provided.droppableProps}>
+                                    <div
+                                        className="notes-grid"
+                                        ref={provided.innerRef}
+                                        {...provided.droppableProps}
+                                    >
                                         {archivedNotes.length === 0 ? (
                                             <div className="empty-notes-container">
                                                 <div className="empty-notes-card centered-empty-message">
                                                     <h5>No Archived Diskettes Found</h5>
-                                                    <p>You have not archived any diskettes yet.</p>
                                                 </div>
                                             </div>
                                         ) : (
@@ -111,11 +114,8 @@ const ArchivedDiskettes = ({ archivedNotes, onRestoreNote, onDeleteNote, onUpdat
                                                         >
                                                             <Note
                                                                 note={note}
-                                                                onEdit={handleRestoreNote}
                                                                 onDelete={onDeleteNote}
-                                                                onArchive={handleRestoreNote} // Restore note from archive
-                                                                onPin={() => { }} // No pin action needed
-                                                                onExport={() => { }} // No export action needed
+                                                                onRestore={handleRestoreNote}
                                                             />
                                                         </div>
                                                     )}

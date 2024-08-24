@@ -4,14 +4,14 @@ import '../index.css';
 import Note from './Note';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Sidebar from './Sidebar';
-import menuDark from '../assets/menu-dark.svg'; // Corrected path
-import menuLight from '../assets/menu-light.svg'; // Corrected path
-import { useTheme } from '../ThemeContext'; // Import the theme context
+import menuDark from '../assets/menu-dark.svg';
+import menuLight from '../assets/menu-light.svg';
+import { useTheme } from '../ThemeContext';
 
 const Dashboard = ({ notes, onCreateNote, onEditNote, onDeleteNote, onArchiveNote, onPinNote, onExportNote, onChangeColor, onUpdateNote }) => {
     const [loading, setLoading] = useState(true);
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    const { mode } = useTheme(); // Get the current mode from the theme context
+    const { mode } = useTheme();
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
@@ -30,26 +30,25 @@ const Dashboard = ({ notes, onCreateNote, onEditNote, onDeleteNote, onArchiveNot
 
         fetchData();
 
-        // Prevent body from scrolling
         document.body.style.overflowY = 'hidden';
 
         return () => {
-            // Reset body overflow on unmount
             document.body.style.overflowY = 'auto';
         };
     }, []);
 
-    const priorityNotes = notes.filter(note => note.isPriority);
-    const regularNotes = notes.filter(note => !note.isPriority);
+    // Filter out archived notes
+    const activeNotes = notes.filter(note => !note.archived);
+    const priorityNotes = activeNotes.filter(note => note.isPriority);
+    const regularNotes = activeNotes.filter(note => !note.isPriority);
 
     const handleDragEnd = async (result) => {
         if (!result.destination) return;
 
-        const reorderedNotes = Array.from(notes);
+        const reorderedNotes = Array.from(activeNotes);
         const [removed] = reorderedNotes.splice(result.source.index, 1);
         reorderedNotes.splice(result.destination.index, 0, removed);
 
-        // Call onUpdateNote to update the order of notes
         try {
             for (const note of reorderedNotes) {
                 await onUpdateNote(note.id, note);
@@ -60,7 +59,7 @@ const Dashboard = ({ notes, onCreateNote, onEditNote, onDeleteNote, onArchiveNot
     };
 
     const handlePriorityToggle = async (noteId) => {
-        const updatedNote = notes.find(note => note.id === noteId);
+        const updatedNote = activeNotes.find(note => note.id === noteId);
         if (!updatedNote) return;
 
         updatedNote.isPriority = !updatedNote.isPriority;
@@ -120,7 +119,7 @@ const Dashboard = ({ notes, onCreateNote, onEditNote, onDeleteNote, onArchiveNot
                                                                 onPin={onPinNote}
                                                                 onExport={onExportNote}
                                                                 onChangeColor={onChangeColor}
-                                                                onPriorityToggle={handlePriorityToggle} // Pass the function
+                                                                onPriorityToggle={handlePriorityToggle}
                                                             />
                                                         </div>
                                                     )}
@@ -162,7 +161,7 @@ const Dashboard = ({ notes, onCreateNote, onEditNote, onDeleteNote, onArchiveNot
                                                                 onPin={onPinNote}
                                                                 onExport={onExportNote}
                                                                 onChangeColor={onChangeColor}
-                                                                onPriorityToggle={handlePriorityToggle} // Pass the function
+                                                                onPriorityToggle={handlePriorityToggle}
                                                             />
                                                         </div>
                                                     )}

@@ -6,13 +6,14 @@ import moment from 'moment';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArchiveIcon from '@mui/icons-material/Archive';
+import UnarchiveIcon from '@mui/icons-material/Unarchive'; // New icon for unarchive
 import PushPinIcon from '@mui/icons-material/PushPin';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import StarIcon from '@mui/icons-material/Star'; // New icon for priority
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import './Note.css';
 
-const Note = ({ note, onEdit, onDelete, onArchive, onPin, onExport, onPriorityToggle }) => {
+const Note = ({ note, onEdit, onDelete, onArchive, onRestore, onPin, onExport, onPriorityToggle }) => {
     const navigate = useNavigate();
     const [overlayVisible, setOverlayVisible] = useState(false);
 
@@ -32,6 +33,14 @@ const Note = ({ note, onEdit, onDelete, onArchive, onPin, onExport, onPriorityTo
     const toggleOverlayVisibility = (event) => {
         event.stopPropagation(); // Prevent triggering handleCardClick
         setOverlayVisible(!overlayVisible);
+    };
+
+    const handleArchiveOrRestore = () => {
+        if (onRestore) {
+            onRestore(note.id);
+        } else if (onArchive) {
+            onArchive(note.id);
+        }
     };
 
     const style = {
@@ -64,7 +73,9 @@ const Note = ({ note, onEdit, onDelete, onArchive, onPin, onExport, onPriorityTo
                 <div className={`overlay ${overlayVisible ? 'visible' : ''}`} onClick={(event) => event.stopPropagation()}>
                     <button onClick={() => onEdit(note.id)}><EditIcon /></button>
                     <button onClick={() => onDelete(note.id)}><DeleteIcon /></button>
-                    <button onClick={() => onArchive(note.id)}><ArchiveIcon /></button>
+                    <button onClick={handleArchiveOrRestore}>
+                        {onRestore ? <UnarchiveIcon /> : <ArchiveIcon />}
+                    </button>
                     <button onClick={() => onPin(note.id)}><PushPinIcon /></button>
                     <button onClick={() => onExport(note.id)}><FileDownloadIcon /></button>
                     <button onClick={() => onPriorityToggle(note.id)}><StarIcon /></button> {/* New button for priority */}
@@ -78,7 +89,9 @@ const Note = ({ note, onEdit, onDelete, onArchive, onPin, onExport, onPriorityTo
                         <div className="overlay" onClick={(event) => event.stopPropagation()}>
                             <button onClick={() => onEdit(note.id)}><EditIcon /></button>
                             <button onClick={() => onDelete(note.id)}><DeleteIcon /></button>
-                            <button onClick={() => onArchive(note.id)}><ArchiveIcon /></button>
+                            <button onClick={handleArchiveOrRestore}>
+                                {onRestore ? <UnarchiveIcon /> : <ArchiveIcon />}
+                            </button>
                             <button onClick={() => onPin(note.id)}><PushPinIcon /></button>
                             <button onClick={() => onExport(note.id)}><FileDownloadIcon /></button>
                             <button onClick={() => onPriorityToggle(note.id)}><StarIcon /></button> {/* New button for priority */}
