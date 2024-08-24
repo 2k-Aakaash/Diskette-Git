@@ -283,6 +283,15 @@ const App = () => {
     handleUpdateNote(noteId, { content: newContent });
   };
 
+  const handleArchiveOrRestore = () => {
+    if (onRestore) {
+      onRestore(note.id);
+    } else if (onArchive) {
+      onArchive(note.id); // Ensure this line is correct
+    }
+  };
+
+
   return (
     <div className={`app ${theme}`}>
       <Navbar
@@ -300,7 +309,7 @@ const App = () => {
             notes={notes}
             onEdit={handleEditNote}
             onDelete={handleDeleteNote}
-            onArchive={handleArchiveNote}
+            onArchiveNote={handleArchiveNote}
             onPin={handlePinNote}
             onExport={handleExportNote}
             onChangeColor={handleChangeColor}
@@ -316,6 +325,8 @@ const App = () => {
           <ArchiveSection
             archivedNotes={archivedNotes}
             onUnarchive={handleUnarchiveNote}
+            onDeleteNote={handleDeleteNote} // Ensure this function is defined in App
+            onUpdateNote={handleUpdateNote}  // Pass handleUpdateNote as a prop
             customColors={customColors}
             theme={theme}
           />
