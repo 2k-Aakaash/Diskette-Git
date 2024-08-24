@@ -13,7 +13,7 @@ const root = createRoot(container);
 
 root.render(
   <ThemeContextProvider>
-    <BrowserRouter basename="/diskette">
+    <BrowserRouter> {/* Remove basename */}
       <CssBaseline />
       <App />
     </BrowserRouter>

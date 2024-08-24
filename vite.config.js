@@ -6,7 +6,7 @@ export default defineConfig({
    server: {
     host: true, 
   },
-  base: '/Diskette/',
+  base: '/',
   plugins: [react()],
   optimizeDeps: {
     include: ['jspdf', 'file-saver']

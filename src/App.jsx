@@ -190,9 +190,6 @@ const App = () => {
     }
   };
 
-
-
-
   const handleUnarchiveNote = async (noteId) => {
     if (user) {
       const note = archivedNotes.find((n) => n.id === noteId);
@@ -215,7 +212,6 @@ const App = () => {
       }
     }
   };
-
 
   const handlePinNote = (noteId) => {
     const updatedNotes = notes.map(note => note.id === noteId ? { ...note, pinned: !note.pinned } : note);
@@ -275,47 +271,75 @@ const App = () => {
     }
   };
 
+  const handleUpdateTitle = (noteId, newTitle) => {
+    const updatedNotes = notes.map(note => note.id === noteId ? { ...note, title: newTitle } : note);
+    setNotes(updatedNotes);
+    handleUpdateNote(noteId, { title: newTitle });
+  };
+
+  const handleUpdateContent = (noteId, newContent) => {
+    const updatedNotes = notes.map(note => note.id === noteId ? { ...note, content: newContent } : note);
+    setNotes(updatedNotes);
+    handleUpdateNote(noteId, { content: newContent });
+  };
+
   return (
-    <>
+    <div className={`app ${theme}`} style={{ backgroundColor: customColors.noteBackground }}>
       <Navbar
         onSignIn={handleGoogleSignIn}
         onSignOut={handleSignOut}
+        onCreateNote={handleCreateNote}
         user={user}
         customColors={customColors}
+        theme={theme}
+        toggleTheme={toggleTheme}
       />
       <Routes>
         <Route path="/" element={
           <Dashboard
             notes={notes}
-            onCreateNote={handleCreateNote}
-            onDragEnd={handleDragEnd}
-            onEditNote={handleEditNote}
-            onDeleteNote={handleDeleteNote}
-            onArchiveNote={handleArchiveNote}
-            onPinNote={handlePinNote}
-            onExportNote={handleExportNote}
+            onEdit={handleEditNote}
+            onDelete={handleDeleteNote}
+            onArchive={handleArchiveNote}
+            onPin={handlePinNote}
+            onExport={handleExportNote}
             onChangeColor={handleChangeColor}
-            onUpdateNote={handleUpdateNote}
-            onSignIn={handleGoogleSignIn}
-            onSignOut={handleSignOut}
+            onUpdateTitle={handleUpdateTitle}
+            onUpdateContent={handleUpdateContent}
+            user={user}
             customColors={customColors}
+            handleDragEnd={handleDragEnd}
           />
         } />
-        <Route path="/note/:id" element={<NoteDetails
-          notes={notes} customColors={customColors}
-        />} />
-        <Route path="/Archived" element={<ArchiveSection
-          archivedNotes={archivedNotes}
-          onUnarchive={handleUnarchiveNote}
-          onUpdateNote={handleUpdateNote}  // Add this line to pass the function
-          customColors={customColors}
-        />} />
+        <Route path="/note/:id" element={<NoteDetails notes={notes} customColors={customColors} />} />
+        <Route path="/Archived" element={
+          <ArchiveSection
+            archivedNotes={archivedNotes}
+            onUnarchive={handleUnarchiveNote}
+            customColors={customColors}
+            theme={theme}
+          />
+        } />
       </Routes>
-      <CreateNote open={isCreateNoteOpen} onClose={handleCloseCreateNote} onSave={handleSaveNote} />
-      {noteToEdit && <EditNote open={isEditNoteOpen} onClose={() => setIsEditNoteOpen(false)} onSave={handleSaveEditedNote} note={noteToEdit} />}
-      <DeleteConfirmationModal open={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)} onConfirm={confirmDeleteNote} />
-      {noteToExport && <ExportNote open={isExportNoteOpen} onClose={handleCloseExportNote} note={noteToExport} />}
-    </>
+      {isCreateNoteOpen && <CreateNote onSave={handleSaveNote} onClose={handleCloseCreateNote} customColors={customColors} />}
+      {isEditNoteOpen && noteToEdit && (
+        <EditNote note={noteToEdit} onSave={handleSaveEditedNote} onClose={() => setIsEditNoteOpen(false)} customColors={customColors} />
+      )}
+      {isDeleteModalOpen && noteToDelete && (
+        <DeleteConfirmationModal
+          onConfirm={confirmDeleteNote}
+          onCancel={() => setIsDeleteModalOpen(false)}
+          customColors={customColors}
+        />
+      )}
+      {isExportNoteOpen && noteToExport && (
+        <ExportNote
+          note={noteToExport}
+          onClose={handleCloseExportNote}
+          customColors={customColors}
+        />
+      )}
+    </div>
   );
 };
 
