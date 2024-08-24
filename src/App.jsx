@@ -284,7 +284,7 @@ const App = () => {
   };
 
   return (
-    <div className={`app ${theme}`} style={{ backgroundColor: customColors.noteBackground }}>
+    <div className={`app ${theme}`}>
       <Navbar
         onSignIn={handleGoogleSignIn}
         onSignOut={handleSignOut}
