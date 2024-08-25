@@ -37,7 +37,6 @@ const Dashboard = ({ notes, onCreateNote, onEditNote, onDeleteNote, onArchiveNot
         };
     }, []);
 
-    // Filter out archived notes
     const activeNotes = notes.filter(note => !note.archived);
     const priorityNotes = activeNotes.filter(note => note.isPriority);
     const regularNotes = activeNotes.filter(note => !note.isPriority);
@@ -155,9 +154,9 @@ const Dashboard = ({ notes, onCreateNote, onEditNote, onDeleteNote, onArchiveNot
                                                             <Note
                                                                 className={note.isPriority ? 'priority-note' : ''}
                                                                 note={note}
-                                                                onEdit={onEditNote}
+                                                                onEdit={onEditNote}  // Ensure this matches the function name in App.jsx
                                                                 onDelete={onDeleteNote}
-                                                                onArchive={() => onArchiveNote(note.id)}
+                                                                onArchive={onArchiveNote}
                                                                 onPin={onPinNote}
                                                                 onExport={onExportNote}
                                                                 onChangeColor={onChangeColor}

@@ -28,7 +28,7 @@ const Sidebar = ({ open }) => {
                     <img src={archiveIcon} alt="Archive Icon" className="icon" />
                     <span className="text">Archived</span>
                 </div>
-                <div className="sidebar-item">
+                <div className={`sidebar-item ${location.pathname === '/Bin' ? 'active' : ''}`} onClick={() => navigate('/Bin')}>
                     <img src={trashIcon} alt="Trash Icon" className="icon" />
                     <span className="text">Bin</span>
                 </div>

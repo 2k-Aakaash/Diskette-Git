@@ -307,15 +307,14 @@ const App = () => {
         <Route path="/" element={
           <Dashboard
             notes={notes}
-            onEdit={handleEditNote}
-            onDelete={handleDeleteNote}
+            onEditNote={handleEditNote}  // Make sure this matches the prop name in Dashboard
+            onDeleteNote={handleDeleteNote}
             onArchiveNote={handleArchiveNote}
-            onPin={handlePinNote}
-            onExport={handleExportNote}
+            onPinNote={handlePinNote}
+            onExportNote={handleExportNote}
             onChangeColor={handleChangeColor}
-            onUpdateTitle={handleUpdateTitle}
-            onUpdateContent={handleUpdateContent}
-            user={user}
+            onUpdateNote={handleUpdateNote}
+            onCreateNote={handleCreateNote}
             customColors={customColors}
             handleDragEnd={handleDragEnd}
           />
