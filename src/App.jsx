@@ -125,9 +125,12 @@ const App = () => {
 
   const handleEditNote = (noteId) => {
     const note = notes.find(n => n.id === noteId);
-    setNoteToEdit(note);
-    setIsEditNoteOpen(true);
+    if (note) {
+      setNoteToEdit(note); // Set the note to be edited
+      setIsEditNoteOpen(true); // Open the edit modal or component
+    }
   };
+
 
   const handleSaveEditedNote = async (editedNote) => {
     if (user) {
@@ -307,7 +310,7 @@ const App = () => {
         <Route path="/" element={
           <Dashboard
             notes={notes}
-            onEditNote={handleEditNote}  // Make sure this matches the prop name in Dashboard
+            onEditNote={handleEditNote}
             onDeleteNote={handleDeleteNote}
             onArchiveNote={handleArchiveNote}
             onPinNote={handlePinNote}
@@ -333,8 +336,14 @@ const App = () => {
       </Routes>
       {isCreateNoteOpen && <CreateNote onSave={handleSaveNote} onClose={handleCloseCreateNote} customColors={customColors} />}
       {isEditNoteOpen && noteToEdit && (
-        <EditNote note={noteToEdit} onSave={handleSaveEditedNote} onClose={() => setIsEditNoteOpen(false)} customColors={customColors} />
+        <EditNote
+          open={isEditNoteOpen}
+          onClose={() => setIsEditNoteOpen(false)}
+          onSave={handleSaveEditedNote}
+          note={noteToEdit}
+        />
       )}
+
       {isDeleteModalOpen && noteToDelete && (
         <DeleteConfirmationModal
           onConfirm={confirmDeleteNote}
