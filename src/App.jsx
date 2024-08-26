@@ -33,6 +33,7 @@ const App = () => {
   const [archivedNotes, setArchivedNotes] = useState([]);
   const [noteToExport, setNoteToExport] = useState(null);
   const [isExportNoteOpen, setIsExportNoteOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { theme, toggleTheme } = useTheme(); // Get theme and toggle function
 
@@ -153,6 +154,7 @@ const App = () => {
 
   const confirmDeleteNote = async () => {
     if (user) {
+      setLoading(true); // Set loading state to true
       const noteRef = doc(db, 'notes', noteToDelete);
 
       try {
@@ -161,9 +163,12 @@ const App = () => {
         setNoteToDelete(null);
       } catch (error) {
         console.error('Error deleting note:', error);
+      } finally {
+        setLoading(false); // Set loading state back to false
       }
     }
   };
+
 
   const handleArchiveNote = async (noteId) => {
     if (user) {
@@ -346,11 +351,13 @@ const App = () => {
 
       {isDeleteModalOpen && noteToDelete && (
         <DeleteConfirmationModal
+          open={isDeleteModalOpen}
+          onClose={() => setIsDeleteModalOpen(false)}
           onConfirm={confirmDeleteNote}
-          onCancel={() => setIsDeleteModalOpen(false)}
           customColors={customColors}
         />
       )}
+
       {isExportNoteOpen && noteToExport && (
         <ExportNote
           note={noteToExport}
