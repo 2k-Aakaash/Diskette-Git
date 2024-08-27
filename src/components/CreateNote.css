@@ -59,7 +59,12 @@
     font-size: 18px;
     font-weight: 700;
     letter-spacing: 1px;
-    margin-right: 10px;
+    margin-right: 4px;
+    transition: all 0.3s ease-in-out;
+}
+
+.create-note-button-floating:hover{
+    box-shadow: 0 2px 20px rgba(254, 254, 254, 0.4);
 }
 
 .create-note-button-floating img {
