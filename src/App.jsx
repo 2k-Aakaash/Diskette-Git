@@ -7,9 +7,10 @@ import CreateNote from './components/CreateNote';
 import EditNote from './components/EditNote';
 import DeleteConfirmationModal from './components/DeleteConfirmationModal';
 import ArchiveSection from './components/ArchivedDiskettes';
+import BinSection from './components/Bin';
 import ExportNote from './components/ExportNote';
 import { auth, provider, signInWithPopup, signOut, db } from './firebaseConfig';
-import { onSnapshot, query, collection, where, addDoc, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { onSnapshot, query, collection, where, addDoc, doc, updateDoc, deleteDoc, getDoc } from 'firebase/firestore';
 import { useTheme } from './ThemeContext'; // Import theme context
 
 const customColors = {
@@ -31,6 +32,7 @@ const App = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [noteToDelete, setNoteToDelete] = useState(null);
   const [archivedNotes, setArchivedNotes] = useState([]);
+  const [binNotes, setBinNotes] = useState([]);
   const [noteToExport, setNoteToExport] = useState(null);
   const [isExportNoteOpen, setIsExportNoteOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -54,6 +56,7 @@ const App = () => {
       const fetchNotes = async () => {
         const q = query(collection(db, 'notes'), where('userId', '==', user.uid));
         const archivedQuery = query(collection(db, 'notes'), where('userId', '==', user.uid), where('archived', '==', true));
+        const binQuery = query(collection(db, 'bin'), where('userId', '==', user.uid));
 
         const unsubscribe = onSnapshot(q, (snapshot) => {
           const notesData = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -65,10 +68,15 @@ const App = () => {
           setArchivedNotes(archivedData);
         });
 
+        const binUnsubscribe = onSnapshot(binQuery, (snapshot) => {
+          const binData = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+          setBinNotes(binData);
+        });
 
         return () => {
           unsubscribe();
           archivedUnsubscribe();
+          binUnsubscribe();
         };
       };
 
@@ -76,6 +84,7 @@ const App = () => {
     } else {
       setNotes([]);
       setArchivedNotes([]);
+      setBinNotes([]);
     }
   }, [user]);
 
@@ -152,22 +161,117 @@ const App = () => {
     setIsDeleteModalOpen(true);
   };
 
+  // const confirmDeleteNote = async () => {
+  //   if (user) {
+  //     setLoading(true); // Set loading state to true
+  //     const noteRef = doc(db, 'notes', noteToDelete);
+
+  //     try {
+  //       await deleteDoc(noteRef);
+  //       setIsDeleteModalOpen(false);
+  //       setNoteToDelete(null);
+  //     } catch (error) {
+  //       console.error('Error deleting note:', error);
+  //     } finally {
+  //       setLoading(false); // Set loading state back to false
+  //     }
+  //   }
+  // };
+
   const confirmDeleteNote = async () => {
-    if (user) {
-      setLoading(true); // Set loading state to true
+    if (user && noteToDelete) {
+      setLoading(true);
       const noteRef = doc(db, 'notes', noteToDelete);
+      const noteDoc = await getDoc(noteRef); // Fetch the note data
+      const noteData = noteDoc.data();
 
       try {
+        // Move the note to the bin collection
+        await addDoc(collection(db, 'bin'), {
+          ...noteData,
+          deletedAt: new Date().toISOString(), // Add deletion timestamp
+        });
+
+        // Delete the note from its original collection
         await deleteDoc(noteRef);
+
+        // Remove from local state
+        setNotes((prevNotes) => prevNotes.filter((n) => n.id !== noteToDelete));
+        setArchivedNotes((prevArchivedNotes) => prevArchivedNotes.filter((n) => n.id !== noteToDelete));
+
         setIsDeleteModalOpen(false);
         setNoteToDelete(null);
       } catch (error) {
-        console.error('Error deleting note:', error);
+        console.error('Error moving note to bin:', error);
       } finally {
-        setLoading(false); // Set loading state back to false
+        setLoading(false);
       }
     }
   };
+
+  const handleRestoreNote = async (noteId) => {
+    if (user) {
+      const noteRef = doc(db, 'bin', noteId);
+      const noteDoc = await getDoc(noteRef);
+      const noteData = noteDoc.data();
+
+      try {
+        // Move the note back to its original collection
+        const targetCollection = noteData.archived ? 'notes' : 'notes';
+        await addDoc(collection(db, targetCollection), noteData);
+
+        // Delete the note from the bin collection
+        await deleteDoc(noteRef);
+
+        // Remove from local state
+        setBinNotes((prevBinNotes) => prevBinNotes.filter((n) => n.id !== noteId));
+
+      } catch (error) {
+        console.error('Error restoring note:', error);
+      }
+    }
+  };
+
+  const handlePermanentDelete = async (noteId) => {
+    if (user) {
+      try {
+        await deleteDoc(doc(db, 'bin', noteId));
+        setBinNotes((prevBinNotes) => prevBinNotes.filter((n) => n.id !== noteId));
+      } catch (error) {
+        console.error('Error permanently deleting note:', error);
+      }
+    }
+  };
+
+  const deleteAllBinNotes = async () => {
+    if (user) {
+      try {
+        const binNotesToDelete = binNotes.map((note) => doc(db, 'bin', note.id));
+        await Promise.all(binNotesToDelete.map((noteRef) => deleteDoc(noteRef)));
+        setBinNotes([]);
+      } catch (error) {
+        console.error('Error deleting all notes from bin:', error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (user) {
+        binNotes.forEach(async (note) => {
+          const deleteDate = new Date(note.deletedAt);
+          const currentDate = new Date();
+          const daysDifference = Math.floor((currentDate - deleteDate) / (1000 * 60 * 60 * 24));
+
+          if (daysDifference >= 30) {
+            await handlePermanentDelete(note.id);
+          }
+        });
+      }
+    }, 24 * 60 * 60 * 1000); // Run every 24 hours
+
+    return () => clearInterval(interval);
+  }, [binNotes, user]);
 
 
   const handleArchiveNote = async (noteId) => {
@@ -336,6 +440,14 @@ const App = () => {
             onUpdateNote={handleUpdateNote}  // Pass handleUpdateNote as a prop
             customColors={customColors}
             theme={theme}
+          />
+        } />
+        <Route path="/Bin" element={
+          <BinSection
+            binNotes={binNotes}
+            onRestoreNote={handleRestoreNote}
+            onDeleteNote={handlePermanentDelete}
+            onDeleteAll={deleteAllBinNotes}
           />
         } />
       </Routes>
