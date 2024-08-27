@@ -17,10 +17,13 @@ const Sidebar = ({ open }) => {
         backgroundColor: mode === 'dark' ? 'var(--color-950)' : '#F7E6FF',
     };
 
+    // Determine if the Diskette button should be active
+    const isDisketteActive = location.pathname === '/' || location.pathname === '/Diskette';
+
     return (
         <div className={`sidebar-container ${open ? 'open' : ''}`} style={sidebarStyles}>
             <div className="sidebar-content">
-                <div className={`sidebar-item ${location.pathname === '/Diskette' ? 'active' : ''}`} onClick={() => navigate('/')}>
+                <div className={`sidebar-item ${isDisketteActive ? 'active' : ''}`} onClick={() => navigate('/')}>
                     <img src={disketteIcon} alt="Diskette Icon" className="icon" />
                     <span className="text">Diskettes</span>
                 </div>
