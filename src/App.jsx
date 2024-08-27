@@ -221,10 +221,10 @@ const App = () => {
     }
   };
 
-  const handlePinNote = (noteId) => {
-    const updatedNotes = notes.map(note => note.id === noteId ? { ...note, pinned: !note.pinned } : note);
-    setNotes(updatedNotes);
-  };
+  // const handlePinNote = (noteId) => {
+  //   const updatedNotes = notes.map(note => note.id === noteId ? { ...note, pinned: !note.pinned } : note);
+  //   setNotes(updatedNotes);
+  // };
 
   const handleExportNote = (noteId) => {
     const note = notes.find(n => n.id === noteId);
@@ -318,7 +318,7 @@ const App = () => {
             onEditNote={handleEditNote}
             onDeleteNote={handleDeleteNote}
             onArchiveNote={handleArchiveNote}
-            onPinNote={handlePinNote}
+            // onPinNote={handlePinNote}
             onExportNote={handleExportNote}
             onChangeColor={handleChangeColor}
             onUpdateNote={handleUpdateNote}

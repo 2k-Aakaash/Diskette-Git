@@ -8,7 +8,7 @@ import menuDark from '../assets/menu-dark.svg';
 import menuLight from '../assets/menu-light.svg';
 import { useTheme } from '../ThemeContext';
 
-const Dashboard = ({ notes, onCreateNote, onEditNote, onDeleteNote, onArchiveNote, onPinNote, onExportNote, onChangeColor, onUpdateNote }) => {
+const Dashboard = ({ notes, onCreateNote, onEditNote, onDeleteNote, onArchiveNote, /* onPinNote */ onExportNote, onChangeColor, onUpdateNote }) => {
     const [loading, setLoading] = useState(true);
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const { mode } = useTheme();
@@ -115,7 +115,7 @@ const Dashboard = ({ notes, onCreateNote, onEditNote, onDeleteNote, onArchiveNot
                                                                 onEdit={onEditNote}
                                                                 onDelete={onDeleteNote}
                                                                 onArchive={onArchiveNote}
-                                                                onPin={onPinNote}
+                                                                // onPin={onPinNote}
                                                                 onExport={onExportNote}
                                                                 onChangeColor={onChangeColor}
                                                                 onPriorityToggle={handlePriorityToggle}
@@ -154,10 +154,10 @@ const Dashboard = ({ notes, onCreateNote, onEditNote, onDeleteNote, onArchiveNot
                                                             <Note
                                                                 className={note.isPriority ? 'priority-note' : ''}
                                                                 note={note}
-                                                                onEdit={onEditNote}  // Ensure this matches the function name in App.jsx
+                                                                onEdit={onEditNote}
                                                                 onDelete={onDeleteNote}
                                                                 onArchive={onArchiveNote}
-                                                                onPin={onPinNote}
+                                                                // onPin={onPinNote}
                                                                 onExport={onExportNote}
                                                                 onChangeColor={onChangeColor}
                                                                 onPriorityToggle={handlePriorityToggle}
