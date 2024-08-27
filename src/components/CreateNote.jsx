@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField, Box } from '@mui/material';
 import MDEditor from '@uiw/react-md-editor';
+import disketteIcon from '../assets/edit-icon.svg';
 import './CreateNote.css';
 
 const customColors = {

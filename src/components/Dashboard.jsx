@@ -6,9 +6,10 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Sidebar from './Sidebar';
 import menuDark from '../assets/menu-dark.svg';
 import menuLight from '../assets/menu-light.svg';
+import disketteIcon from '../assets/edit-icon.svg';
 import { useTheme } from '../ThemeContext';
 
-const Dashboard = ({ notes, onCreateNote, onEditNote, onDeleteNote, onArchiveNote, /* onPinNote */ onExportNote, onChangeColor, onUpdateNote }) => {
+const Dashboard = ({ notes, onCreateNote, onEditNote, onDeleteNote, onArchiveNote, onExportNote, onChangeColor, onUpdateNote }) => {
     const [loading, setLoading] = useState(true);
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const { mode } = useTheme();
@@ -115,7 +116,6 @@ const Dashboard = ({ notes, onCreateNote, onEditNote, onDeleteNote, onArchiveNot
                                                                 onEdit={onEditNote}
                                                                 onDelete={onDeleteNote}
                                                                 onArchive={onArchiveNote}
-                                                                // onPin={onPinNote}
                                                                 onExport={onExportNote}
                                                                 onChangeColor={onChangeColor}
                                                                 onPriorityToggle={handlePriorityToggle}
@@ -157,7 +157,6 @@ const Dashboard = ({ notes, onCreateNote, onEditNote, onDeleteNote, onArchiveNot
                                                                 onEdit={onEditNote}
                                                                 onDelete={onDeleteNote}
                                                                 onArchive={onArchiveNote}
-                                                                // onPin={onPinNote}
                                                                 onExport={onExportNote}
                                                                 onChangeColor={onChangeColor}
                                                                 onPriorityToggle={handlePriorityToggle}
@@ -176,7 +175,8 @@ const Dashboard = ({ notes, onCreateNote, onEditNote, onDeleteNote, onArchiveNot
                 )}
             </div>
             <button className="create-note-button-floating" onClick={onCreateNote}>
-                +
+                <img src={disketteIcon} alt="Create Diskette" style={{ width: '24px', height: '24px' }} />
+                <span>Create Diskette</span>
             </button>
         </div>
     );

@@ -40,3 +40,31 @@
         margin: 0px;
     }
 }
+
+.create-note-button-floating {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    background-color: #68127d;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    width: 200px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-right: 10px;
+}
+
+.create-note-button-floating img {
+    width: 20px;
+    height: 20px;
+    margin-right: 14px;
+}
+
