@@ -446,7 +446,7 @@ const App = () => {
           <BinSection
             binNotes={binNotes}
             onRestoreNote={handleRestoreNote}
-            onDeleteNote={handlePermanentDelete}
+            onDeleteNotePermanently={handlePermanentDelete}
             onDeleteAll={deleteAllBinNotes}
           />
         } />

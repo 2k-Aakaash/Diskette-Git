@@ -7,10 +7,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import UnarchiveIcon from '@mui/icons-material/Unarchive';
+// import PushPinIcon from '@mui/icons-material/PushPin';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import StarIcon from '@mui/icons-material/Star';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-// import PushPinIcon from '@mui/icons-material/PushPin';
 import './Note.css';
 
 const Note = ({ note, onEdit, onDelete, onArchive, onRestore, onPin, onExport, onPriorityToggle }) => {
@@ -92,8 +92,7 @@ const Note = ({ note, onEdit, onDelete, onArchive, onRestore, onPin, onExport, o
                             <button onClick={handleArchiveOrRestore}>
                                 {onRestore ? <UnarchiveIcon /> : <ArchiveIcon />}
                             </button>
-                            {/* Uncomment if Pin functionality is implemented */}
-                            {/* <button onClick={() => onPin(note.id)}><PushPinIcon /></button> */}
+                            <button onClick={() => onPin(note.id)}><PushPinIcon /></button>
                             <button onClick={() => onExport(note.id)}><FileDownloadIcon /></button>
                             <button onClick={() => onPriorityToggle(note.id)}><StarIcon /></button>
                         </div>

@@ -1,3 +1,4 @@
+// Bin.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
@@ -57,16 +58,7 @@ const Bin = ({ binNotes, onRestoreNote, onDeleteNotePermanently, onUpdateNote })
 
     const handleRestoreNote = async (noteId) => {
         try {
-            const noteToRestore = binNotes.find(note => note.id === noteId);
-            if (!noteToRestore) {
-                console.error(`Note with ID ${noteId} not found in bin notes.`);
-                return;
-            }
-
-            // Update the note's status to restore it to its previous state
-            await onRestoreNote(noteId, noteToRestore.previousStatus);
-
-            // Optionally: Remove the restored note from the bin notes list in the UI
+            await onRestoreNote(noteId);
         } catch (error) {
             console.error(`Error restoring note with ID ${noteId}:`, error);
         }
@@ -75,8 +67,6 @@ const Bin = ({ binNotes, onRestoreNote, onDeleteNotePermanently, onUpdateNote })
     const handleDeletePermanently = async (noteId) => {
         try {
             await onDeleteNotePermanently(noteId);
-
-            // Optionally: Remove the deleted note from the bin notes list in the UI
         } catch (error) {
             console.error(`Error permanently deleting note with ID ${noteId}:`, error);
         }
@@ -124,8 +114,8 @@ const Bin = ({ binNotes, onRestoreNote, onDeleteNotePermanently, onUpdateNote })
                                                         >
                                                             <Note
                                                                 note={note}
-                                                                onDelete={() => handleDeletePermanently(note.id)}
-                                                                onRestore={() => handleRestoreNote(note.id)}
+                                                                onDeleteForever={handleDeletePermanently}
+                                                                onRestore={handleRestoreNote}
                                                                 isInBin={true}
                                                             />
                                                         </div>
