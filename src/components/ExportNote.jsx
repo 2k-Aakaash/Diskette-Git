@@ -151,28 +151,23 @@ const ExportNote = ({ open, onClose, note }) => {
                     <Select value={format} onChange={(e) => setFormat(e.target.value)}>
                         <MenuItem value="pdf">PDF</MenuItem>
                         <MenuItem value="docx">DOCX</MenuItem>
-                        <MenuItem value="md">Markdown</MenuItem>
-                        <MenuItem value="txt">Text</MenuItem>
+                        <MenuItem value="md">Markdown (.md)</MenuItem>
+                        <MenuItem value="txt">Text (.txt)</MenuItem>
                     </Select>
                 </FormControl>
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose}>Cancel</Button>
-                {format === 'pdf' ? (
-                    <PDFDownloadLink
-                        document={<PDFContent note={note} />}
-                        fileName={`${note.title}.pdf`}
-                    >
-                        {({ loading }) =>
-                            loading ? 'Loading document...' : 'Download PDF'
-                        }
+                <Button onClick={handleExport} color="primary">Export</Button>
+                {format === 'pdf' && (
+                    <PDFDownloadLink document={<PDFContent note={note} />} fileName={`${note.title}.pdf`}>
+                        {({ loading }) => (loading ? 'Loading document...' : 'Download PDF')}
                     </PDFDownloadLink>
-                ) : (
-                    <Button onClick={handleExport} color="primary">Export</Button>
                 )}
             </DialogActions>
         </Dialog>
     );
 };
+
 
 export default ExportNote;
