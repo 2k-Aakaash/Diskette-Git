@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './Navbar.css';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -33,7 +34,8 @@ const Search = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     padding: '0 10px',
-    width: '30ch',
+    width: '80%', // Adjust the width here
+    maxWidth: '650px', // Optional: limit the maximum width
 }));
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
@@ -52,6 +54,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create('width'),
     width: '100%',
+    boxSizing: 'border-box',
     [theme.breakpoints.up('sm')]: {
         width: '15ch',
     },

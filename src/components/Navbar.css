@@ -8,8 +8,20 @@
     }
 }
 
-@media screen and (min-width: 600px) {
-    .css-n3793s-MuiInputBase-root{
-        width: 100px !important;
+@media screen and (min-width: 601px) {
+    .css-jb236k-MuiInputBase-root{
+        width: 100ch !important;
+    }    
+
+    .css-rzpqfg-MuiInputBase-root{
+        width: 100ch !important;
     }
+}
+
+.css-jb236k-MuiInputBase-root{
+    width: 100ch !important;
+}  
+
+.css-rzpqfg-MuiInputBase-root{
+    width: 100ch !important;
 }
