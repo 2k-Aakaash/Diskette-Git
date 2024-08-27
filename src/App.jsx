@@ -360,11 +360,13 @@ const App = () => {
 
       {isExportNoteOpen && noteToExport && (
         <ExportNote
+          open={isExportNoteOpen}  // Pass the `isExportNoteOpen` state as the `open` prop
           note={noteToExport}
           onClose={handleCloseExportNote}
           customColors={customColors}
         />
       )}
+
     </div>
   );
 };
