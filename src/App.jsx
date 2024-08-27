@@ -339,7 +339,15 @@ const App = () => {
           />
         } />
       </Routes>
-      {isCreateNoteOpen && <CreateNote onSave={handleSaveNote} onClose={handleCloseCreateNote} customColors={customColors} />}
+      {isCreateNoteOpen && (
+        <CreateNote
+          open={isCreateNoteOpen}
+          onSave={handleSaveNote}
+          onClose={handleCloseCreateNote}
+          customColors={customColors}
+        />
+      )}
+
       {isEditNoteOpen && noteToEdit && (
         <EditNote
           open={isEditNoteOpen}
