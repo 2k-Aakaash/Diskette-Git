@@ -43,6 +43,7 @@
 
 .create-note-button-floating {
     position: fixed;
+    z-index: 9999;
     bottom: 16px;
     right: 16px;
     background-color: #68127d;
