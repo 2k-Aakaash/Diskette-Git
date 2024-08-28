@@ -11,9 +11,11 @@ import PushPinIcon from '@mui/icons-material/PushPin';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import StarIcon from '@mui/icons-material/Star';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever'; // New icon for permanent deletion
+import RestoreIcon from '@mui/icons-material/Restore'; // New icon for restoring note
 import './Note.css';
 
-const Note = ({ note, onEdit, onDelete, onArchive, onRestore, onPin, onExport, onPriorityToggle }) => {
+const Note = ({ note, onEdit, onDelete, onArchive, onRestore, onPin, onExport, onPriorityToggle, isInBin }) => {
     const navigate = useNavigate();
     const [overlayVisible, setOverlayVisible] = useState(false);
 
@@ -25,7 +27,7 @@ const Note = ({ note, onEdit, onDelete, onArchive, onRestore, onPin, onExport, o
     });
 
     const handleCardClick = () => {
-        if (window.innerWidth > 600) {
+        if (window.innerWidth > 600 && !isInBin) {
             navigate(`/note/${note.id}`);
         }
     };
@@ -71,14 +73,22 @@ const Note = ({ note, onEdit, onDelete, onArchive, onRestore, onPin, onExport, o
             </div>
             {window.innerWidth >= 480 ? (
                 <div className={`overlay ${overlayVisible ? 'visible' : ''}`} onClick={(event) => event.stopPropagation()}>
-                    <button onClick={() => onEdit(note.id)}><EditIcon /></button>
-                    <button onClick={() => onDelete(note.id)}><DeleteIcon /></button>
-                    <button onClick={handleArchiveOrRestore}>
-                        {onRestore ? <UnarchiveIcon /> : <ArchiveIcon />}
-                    </button>
-                    {/* <button onClick={() => onPin(note.id)}><PushPinIcon /></button> */}
-                    <button onClick={() => onExport(note.id)}><FileDownloadIcon /></button>
-                    <button onClick={() => onPriorityToggle(note.id)}><StarIcon /></button>
+                    {isInBin ? (
+                        <>
+                            <button onClick={() => onRestore(note.id)}><RestoreIcon /></button>
+                            <button onClick={() => onDelete(note.id)}><DeleteForeverIcon /></button>
+                        </>
+                    ) : (
+                        <>
+                            <button onClick={() => onEdit(note.id)}><EditIcon /></button>
+                            <button onClick={() => onDelete(note.id)}><DeleteIcon /></button>
+                            <button onClick={handleArchiveOrRestore}>
+                                {onRestore ? <UnarchiveIcon /> : <ArchiveIcon />}
+                            </button>
+                            <button onClick={() => onExport(note.id)}><FileDownloadIcon /></button>
+                            <button onClick={() => onPriorityToggle(note.id)}><StarIcon /></button>
+                        </>
+                    )}
                 </div>
             ) : (
                 <>
@@ -87,14 +97,22 @@ const Note = ({ note, onEdit, onDelete, onArchive, onRestore, onPin, onExport, o
                     </button>
                     {overlayVisible && (
                         <div className="overlay" onClick={(event) => event.stopPropagation()}>
-                            <button onClick={() => onEdit(note.id)}><EditIcon /></button>
-                            <button onClick={() => onDelete(note.id)}><DeleteIcon /></button>
-                            <button onClick={handleArchiveOrRestore}>
-                                {onRestore ? <UnarchiveIcon /> : <ArchiveIcon />}
-                            </button>
-                            <button onClick={() => onPin(note.id)}><PushPinIcon /></button>
-                            <button onClick={() => onExport(note.id)}><FileDownloadIcon /></button>
-                            <button onClick={() => onPriorityToggle(note.id)}><StarIcon /></button>
+                            {isInBin ? (
+                                <>
+                                    <button onClick={() => onRestore(note.id)}><RestoreIcon /></button>
+                                    <button onClick={() => onDelete(note.id)}><DeleteForeverIcon /></button>
+                                </>
+                            ) : (
+                                <>
+                                    <button onClick={() => onEdit(note.id)}><EditIcon /></button>
+                                    <button onClick={() => onDelete(note.id)}><DeleteIcon /></button>
+                                    <button onClick={handleArchiveOrRestore}>
+                                        {onRestore ? <UnarchiveIcon /> : <ArchiveIcon />}
+                                    </button>
+                                    <button onClick={() => onExport(note.id)}><FileDownloadIcon /></button>
+                                    <button onClick={() => onPriorityToggle(note.id)}><StarIcon /></button>
+                                </>
+                            )}
                         </div>
                     )}
                 </>

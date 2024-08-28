@@ -1,4 +1,3 @@
-// Bin.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
@@ -9,6 +8,8 @@ import Sidebar from './Sidebar';
 import menuDark from '../assets/menu-dark.svg';
 import menuLight from '../assets/menu-light.svg';
 import { useTheme } from '../ThemeContext';
+import { auth, db } from '../firebaseConfig'; // Import your Firebase configuration
+import { doc, getDoc, setDoc, deleteDoc } from 'firebase/firestore'; // Import Firestore functions
 
 const Bin = ({ binNotes, onRestoreNote, onDeleteNotePermanently, onUpdateNote }) => {
     const [loading, setLoading] = useState(true);
@@ -57,20 +58,51 @@ const Bin = ({ binNotes, onRestoreNote, onDeleteNotePermanently, onUpdateNote })
     };
 
     const handleRestoreNote = async (noteId) => {
+        if (!auth.currentUser) {
+            console.error("No user is currently authenticated.");
+            return;
+        }
+
         try {
-            await onRestoreNote(noteId);
+            const userId = auth.currentUser.uid;
+            const noteRef = doc(db, 'bin', noteId);
+            const noteDoc = await getDoc(noteRef);
+
+            if (noteDoc.exists() && noteDoc.data().userId === userId) {
+                const noteData = noteDoc.data();
+                await setDoc(doc(db, 'notes', noteId), noteData);
+                await deleteDoc(noteRef);
+                console.log(`Note with ID ${noteId} restored successfully.`);
+            } else {
+                console.error(`Permission denied or note does not exist.`);
+            }
         } catch (error) {
             console.error(`Error restoring note with ID ${noteId}:`, error);
         }
     };
 
     const handleDeletePermanently = async (noteId) => {
+        if (!auth.currentUser) {
+            console.error("No user is currently authenticated.");
+            return;
+        }
+
         try {
-            await onDeleteNotePermanently(noteId);
+            const userId = auth.currentUser.uid;
+            const noteRef = doc(db, 'bin', noteId);
+            const noteDoc = await getDoc(noteRef);
+
+            if (noteDoc.exists() && noteDoc.data().userId === userId) {
+                await deleteDoc(noteRef);
+                console.log(`Note with ID ${noteId} deleted permanently.`);
+            } else {
+                console.error(`Permission denied or note does not exist.`);
+            }
         } catch (error) {
             console.error(`Error permanently deleting note with ID ${noteId}:`, error);
         }
     };
+
 
     return (
         <div className={`dashboard-container ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
@@ -114,9 +146,9 @@ const Bin = ({ binNotes, onRestoreNote, onDeleteNotePermanently, onUpdateNote })
                                                         >
                                                             <Note
                                                                 note={note}
-                                                                onDeleteForever={handleDeletePermanently}
+                                                                onDelete={handleDeletePermanently}
                                                                 onRestore={handleRestoreNote}
-                                                                isInBin={true}
+                                                                isInBin={true} // Pass the prop
                                                             />
                                                         </div>
                                                     )}
