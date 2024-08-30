@@ -8,10 +8,10 @@ import Sidebar from './Sidebar';
 import menuDark from '../assets/menu-dark.svg';
 import menuLight from '../assets/menu-light.svg';
 import { useTheme } from '../ThemeContext';
-import { auth, db } from '../firebaseConfig'; // Import your Firebase configuration
-import { doc, getDoc, setDoc, deleteDoc } from 'firebase/firestore'; // Import Firestore functions
+import { auth, db } from '../firebaseConfig';
+import { doc, getDoc, deleteDoc, runTransaction, collection, addDoc } from 'firebase/firestore';
 
-const Bin = ({ binNotes, onRestoreNote, onDeleteNotePermanently, onUpdateNote }) => {
+const Bin = ({ binNotes, onUpdateNote }) => {
     const [loading, setLoading] = useState(true);
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const { mode } = useTheme();
@@ -58,50 +58,65 @@ const Bin = ({ binNotes, onRestoreNote, onDeleteNotePermanently, onUpdateNote })
     };
 
     const handleRestoreNote = async (noteId) => {
-        if (!auth.currentUser) {
-            console.error("No user is currently authenticated.");
+        const user = auth.currentUser;
+
+        if (!user) {
+            console.error("User is not authenticated.");
             return;
         }
 
-        try {
-            const userId = auth.currentUser.uid;
-            const noteRef = doc(db, 'bin', noteId);
-            const noteDoc = await getDoc(noteRef);
+        const noteRef = doc(db, 'bin', noteId);
 
-            if (noteDoc.exists() && noteDoc.data().userId === userId) {
+        try {
+            await runTransaction(db, async (transaction) => {
+                const noteDoc = await transaction.get(noteRef);
+
+                if (!noteDoc.exists()) {
+                    throw "Note does not exist in bin.";
+                }
+
                 const noteData = noteDoc.data();
-                await setDoc(doc(db, 'notes', noteId), noteData);
-                await deleteDoc(noteRef);
-                console.log(`Note with ID ${noteId} restored successfully.`);
-            } else {
-                console.error(`Permission denied or note does not exist.`);
-            }
+                const targetCollection = collection(db, 'notes');
+
+                // Add the note to 'notes' collection
+                await addDoc(targetCollection, noteData);
+
+                // Delete from 'bin'
+                transaction.delete(noteRef);
+            });
+
+            console.log(`Note with ID ${noteId} restored.`);
         } catch (error) {
-            console.error(`Error restoring note with ID ${noteId}:`, error);
+            console.error('Error restoring note:', error);
         }
     };
 
     const handleDeletePermanently = async (noteId) => {
-        if (!auth.currentUser) {
-            console.error("No user is currently authenticated.");
-            return;
-        }
+        const noteRef = doc(db, 'bin', noteId);
 
         try {
-            const userId = auth.currentUser.uid;
-            const noteRef = doc(db, 'bin', noteId);
             const noteDoc = await getDoc(noteRef);
-
-            if (noteDoc.exists() && noteDoc.data().userId === userId) {
-                await deleteDoc(noteRef);
-                console.log(`Note with ID ${noteId} deleted permanently.`);
-            } else {
-                console.error(`Permission denied or note does not exist.`);
+            if (!noteDoc.exists()) {
+                console.error("Note does not exist in bin.");
+                return;
             }
+            console.log("Note exists, proceeding with deletion...");
+
+
+            await deleteDoc(noteRef);
+            setBinNotes(prevNotes => prevNotes.filter(note => note.id !== noteId));
+            console.log(`Note with ID ${noteId} deleted permanently.`);
+
+            console.log("Updated binNotes:", binNotes);
+
+            console.log("Bin component re-rendered with binNotes:", binNotes);
+
         } catch (error) {
             console.error(`Error permanently deleting note with ID ${noteId}:`, error);
         }
     };
+
+
 
 
     return (
@@ -148,7 +163,7 @@ const Bin = ({ binNotes, onRestoreNote, onDeleteNotePermanently, onUpdateNote })
                                                                 note={note}
                                                                 onDelete={handleDeletePermanently}
                                                                 onRestore={handleRestoreNote}
-                                                                isInBin={true} // Pass the prop
+                                                                isInBin={true}
                                                             />
                                                         </div>
                                                     )}

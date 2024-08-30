@@ -182,25 +182,34 @@ const App = () => {
     if (user && noteToDelete) {
       setLoading(true);
       const noteRef = doc(db, 'notes', noteToDelete);
-      const noteDoc = await getDoc(noteRef); // Fetch the note data
+      const noteDoc = await getDoc(noteRef);
+
+      if (!noteDoc.exists()) {
+        console.error('Note does not exist.');
+        setLoading(false);
+        return;
+      }
+
       const noteData = noteDoc.data();
 
       try {
         // Move the note to the bin collection
-        await addDoc(collection(db, 'bin'), {
+        const binDocRef = await addDoc(collection(db, 'bin'), {
           ...noteData,
-          deletedAt: new Date().toISOString(), // Add deletion timestamp
+          deletedAt: new Date().toISOString(),
         });
 
-        // Delete the note from its original collection
-        await deleteDoc(noteRef);
-
-        // Remove from local state
-        setNotes((prevNotes) => prevNotes.filter((n) => n.id !== noteToDelete));
-        setArchivedNotes((prevArchivedNotes) => prevArchivedNotes.filter((n) => n.id !== noteToDelete));
+        // Confirm the note was added to bin before deleting the original
+        if (binDocRef.id) {
+          await deleteDoc(noteRef);
+          setNotes(prevNotes => prevNotes.filter(n => n.id !== noteToDelete));
+          setArchivedNotes(prevArchivedNotes => prevArchivedNotes.filter(n => n.id !== noteToDelete));
+          setNoteToDelete(null);
+        } else {
+          console.error('Failed to move note to bin.');
+        }
 
         setIsDeleteModalOpen(false);
-        setNoteToDelete(null);
       } catch (error) {
         console.error('Error moving note to bin:', error);
       } finally {
@@ -208,6 +217,7 @@ const App = () => {
       }
     }
   };
+
 
   const handleRestoreNote = async (noteId) => {
     if (user) {
