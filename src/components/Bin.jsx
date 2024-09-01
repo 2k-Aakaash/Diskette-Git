@@ -9,9 +9,9 @@ import menuDark from '../assets/menu-dark.svg';
 import menuLight from '../assets/menu-light.svg';
 import { useTheme } from '../ThemeContext';
 import { auth, db } from '../firebaseConfig';
-import { doc, getDoc, deleteDoc, runTransaction, collection, addDoc } from 'firebase/firestore';
+import { doc, deleteDoc, runTransaction, collection, addDoc } from 'firebase/firestore';
 
-const Bin = ({ binNotes, onUpdateNote }) => {
+const Bin = ({ binNotes, setBinNotes, onUpdateNote }) => {
     const [loading, setLoading] = useState(true);
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const { mode } = useTheme();
@@ -20,7 +20,7 @@ const Bin = ({ binNotes, onUpdateNote }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                await new Promise(resolve => setTimeout(resolve, 1000));
+                await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate a delay for loading state
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching bin notes: ", error);
@@ -83,6 +83,9 @@ const Bin = ({ binNotes, onUpdateNote }) => {
 
                 // Delete from 'bin'
                 transaction.delete(noteRef);
+
+                // Update local state to remove restored note
+                setBinNotes((prevBinNotes) => prevBinNotes.filter(note => note.id !== noteId));
             });
 
             console.log(`Note with ID ${noteId} restored.`);
@@ -95,29 +98,16 @@ const Bin = ({ binNotes, onUpdateNote }) => {
         const noteRef = doc(db, 'bin', noteId);
 
         try {
-            const noteDoc = await getDoc(noteRef);
-            if (!noteDoc.exists()) {
-                console.error("Note does not exist in bin.");
-                return;
-            }
-            console.log("Note exists, proceeding with deletion...");
-
-
             await deleteDoc(noteRef);
-            setBinNotes(prevNotes => prevNotes.filter(note => note.id !== noteId));
+
+            // Update local state to remove deleted note
+            setBinNotes((prevBinNotes) => prevBinNotes.filter(note => note.id !== noteId));
+
             console.log(`Note with ID ${noteId} deleted permanently.`);
-
-            console.log("Updated binNotes:", binNotes);
-
-            console.log("Bin component re-rendered with binNotes:", binNotes);
-
         } catch (error) {
             console.error(`Error permanently deleting note with ID ${noteId}:`, error);
         }
     };
-
-
-
 
     return (
         <div className={`dashboard-container ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>

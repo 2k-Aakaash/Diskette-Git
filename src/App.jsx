@@ -182,41 +182,42 @@ const App = () => {
     if (user && noteToDelete) {
       setLoading(true);
       const noteRef = doc(db, 'notes', noteToDelete);
-      const noteDoc = await getDoc(noteRef);
-
-      if (!noteDoc.exists()) {
-        console.error('Note does not exist.');
-        setLoading(false);
-        return;
-      }
-
-      const noteData = noteDoc.data();
 
       try {
-        // Move the note to the bin collection
-        const binDocRef = await addDoc(collection(db, 'bin'), {
-          ...noteData,
-          deletedAt: new Date().toISOString(),
-        });
+        const noteDoc = await getDoc(noteRef);
 
-        // Confirm the note was added to bin before deleting the original
-        if (binDocRef.id) {
-          await deleteDoc(noteRef);
-          setNotes(prevNotes => prevNotes.filter(n => n.id !== noteToDelete));
-          setArchivedNotes(prevArchivedNotes => prevArchivedNotes.filter(n => n.id !== noteToDelete));
-          setNoteToDelete(null);
-        } else {
-          console.error('Failed to move note to bin.');
+        if (!noteDoc.exists()) {
+          console.error('Note does not exist.');
+          setLoading(false);
+          return;
         }
 
+        const noteData = noteDoc.data();
+
+        // Move the note to the bin collection
+        await addDoc(collection(db, 'bin'), {
+          ...noteData,
+          deletedAt: new Date().toISOString(),
+          userId: user.uid,
+        });
+
+        // Delete the note from the original collection
+        await deleteDoc(noteRef);
+
+        // Update local state
+        setNotes(prevNotes => prevNotes.filter(n => n.id !== noteToDelete));
+        setArchivedNotes(prevArchivedNotes => prevArchivedNotes.filter(n => n.id !== noteToDelete));
+        setNoteToDelete(null);
         setIsDeleteModalOpen(false);
       } catch (error) {
-        console.error('Error moving note to bin:', error);
+        console.error('Error deleting note:', error);
       } finally {
         setLoading(false);
       }
     }
   };
+
+
 
 
   const handleRestoreNote = async (noteId) => {
@@ -359,8 +360,16 @@ const App = () => {
   const updateNote = async (noteId, updatedData) => {
     if (user) {
       const noteRef = doc(db, 'notes', noteId);
+
       try {
-        await updateDoc(noteRef, updatedData);
+        await updateDoc(noteRef, {
+          ...updatedData,
+          updatedAt: new Date().toISOString()
+        });
+
+        setNotes(prevNotes => prevNotes.map(note =>
+          note.id === noteId ? { ...note, ...updatedData } : note
+        ));
       } catch (error) {
         console.error('Error updating note:', error);
       }
@@ -458,6 +467,7 @@ const App = () => {
             onRestoreNote={handleRestoreNote}
             onDeleteNotePermanently={handlePermanentDelete}
             onDeleteAll={deleteAllBinNotes}
+            setBinNotes={setBinNotes}
           />
         } />
       </Routes>
