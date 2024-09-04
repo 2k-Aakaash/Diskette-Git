@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button, TextField, Box } from '@mui/material';
 import MDEditor from '@uiw/react-md-editor';
-import disketteIcon from '../assets/edit-icon.svg';
 import './CreateNote.css';
 
 const customColors = {
@@ -26,7 +25,7 @@ const colors = [
 ];
 
 const CreateNote = ({ open, onClose, onSave }) => {
-    const [title, setTitle] = useState('Note Title');
+    const [title, setTitle] = useState('Title');
     const [content, setContent] = useState('');
     const [color, setColor] = useState(colors[0]);
 
@@ -37,8 +36,8 @@ const CreateNote = ({ open, onClose, onSave }) => {
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth sx={{ '& .MuiDialog-paper': { backgroundColor: customColors.modalBackground, width: '90%' } }}>
-            <DialogTitle sx={{ color: customColors.textColor }}>Create Note</DialogTitle>
-            <DialogContent>
+            <DialogTitle sx={{ color: customColors.textColor }}>Create Diskette</DialogTitle>
+            <DialogContent sx={{ height: 'calc(100vh - 200px)', display: 'flex', flexDirection: 'column' }}>
                 <TextField
                     autoFocus
                     margin="dense"
@@ -51,7 +50,14 @@ const CreateNote = ({ open, onClose, onSave }) => {
                     InputLabelProps={{ style: { color: customColors.textColor } }}
                     InputProps={{ style: { color: customColors.textColor } }}
                 />
-                <MDEditor value={content} onChange={setContent} />
+                <Box sx={{ flexGrow: 1, overflow: 'hidden', mt: 2 }}>
+                    <MDEditor
+                        value={content}
+                        onChange={setContent}
+                        highlightEnable={false} // Disable syntax highlighting if not needed
+                        height={'100%'}
+                    />
+                </Box>
                 <Box sx={{ display: 'flex', mt: 2 }}>
                     {colors.map((c) => (
                         <Box

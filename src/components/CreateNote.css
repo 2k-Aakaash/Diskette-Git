@@ -21,8 +21,10 @@
     height: 90% !important;
 }
 
-.w-md-editor{
-    height: 400px !important;
+.w-md-editor {
+    height: calc(100vh - 300px) !important; /* Dynamically adjust height based on viewport */
+    overflow: auto; /* Ensure content remains scrollable if needed */
+    font-family: var(--md-editor-font-family) !important;;
 }
 
 .w-md-editor-toolbar li > button{

@@ -38,7 +38,7 @@ const EditNote = ({ open, onClose, onSave, note }) => {
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                 />
-                <MDEditor value={content} onChange={setContent} />
+                <MDEditor value={content} onChange={setContent} highlightEnable={false} />
                 <Box sx={{ display: 'flex', mt: 2 }}>
                     {colors.map((col) => (
                         <Box
