@@ -10,7 +10,7 @@ const customColors = {
     noteTimestampBg: 'rgba(255, 255, 255, 0.8)',
     actionButton: 'rgb(130, 54, 189)',
     iconColor: 'rgb(255, 255, 255)',
-    modalBackground: 'rgb(29, 25, 53)',
+    modalBackground: '#390045',
     buttonColor: 'rgb(130, 54, 189)',
     textColor: 'rgb(255, 255, 255)',
 };
@@ -35,8 +35,10 @@ const CreateNote = ({ open, onClose, onSave }) => {
     };
 
     return (
-        <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth sx={{ '& .MuiDialog-paper': { backgroundColor: customColors.modalBackground, width: '90%' } }}>
-            <DialogTitle sx={{ color: customColors.textColor }}>Create Diskette</DialogTitle>
+        <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth sx={{ '& .MuiDialog-paper': { backgroundColor: customColors.modalBackground, width: '90%', borderRadius: '20px', padding: '10px 4px 10px 4px' } }}>
+            <DialogTitle sx={{
+                color: customColors.textColor, fontSize: '1.5rem', fontWeight: '700', padding: '10px 10px 10px 20px'
+            }}>Create Diskette</DialogTitle>
             <DialogContent sx={{ height: 'calc(100vh - 200px)', display: 'flex', flexDirection: 'column' }}>
                 <TextField
                     autoFocus
@@ -54,8 +56,7 @@ const CreateNote = ({ open, onClose, onSave }) => {
                     <MDEditor
                         value={content}
                         onChange={setContent}
-                        highlightEnable={false} // Disable syntax highlighting if not needed
-                        height={'100%'}
+                        highlightEnable={false}
                     />
                 </Box>
                 <Box sx={{ display: 'flex', mt: 2 }}>

@@ -22,9 +22,13 @@
 }
 
 .w-md-editor {
-    height: calc(100vh - 300px) !important; /* Dynamically adjust height based on viewport */
-    overflow: auto; /* Ensure content remains scrollable if needed */
+    height: calc(100vh - 300px) !important;
+    overflow: auto;
     font-family: var(--md-editor-font-family) !important;;
+}
+
+.w-md-editor-text-pre, .w-md-editor-text-input{
+    height: calc(80vh - 300px) !important;
 }
 
 .w-md-editor-toolbar li > button{
@@ -45,7 +49,7 @@
 
 .create-note-button-floating {
     position: fixed;
-    z-index: 9999;
+    z-index: 999;
     bottom: 16px;
     right: 16px;
     background-color: #68127d;
@@ -76,3 +80,11 @@
     margin-right: 14px;
 }
 
+
+@media (prefers-color-scheme: dark) {
+    .wmde-markdown, .wmde-markdown-var {
+        color-scheme: dark;
+        --color-accent-emphasis: #c838fd !important;
+        --color-accent-fg: #c838fd !important;
+    }
+}
