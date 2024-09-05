@@ -115,8 +115,26 @@ body.dark-mode .section-title {
 
 .notes-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 30px;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); /* Dynamic column width */
+    gap: 20px; /* Adjust spacing between notes */
+    padding: 20px; /* Padding around the grid */
+}
+@media (max-width: 1024px) {
+    .notes-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* More compact for smaller screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .notes-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Tablet view */
+    }
+}
+
+@media (max-width: 480px) {
+    .notes-grid {
+        grid-template-columns: 1fr; /* Single column layout for mobile */
+    }
 }
 
 /* Ensure horizontal scrolling for Priority Diskette section */
@@ -196,11 +214,60 @@ body.dark-mode .section-title {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    height: 90dvh;
 }
 
 .empty-notes-card {
     text-align: center;
+    padding: 40px;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.empty-notes-card h5 {
+    font-size: 1.8rem;
+    color: var(--section-title-light);
+    margin-bottom: 16px;
+    transition: color 0.3s ease;
+}
+
+.empty-notes-card p {
+    font-size: 1.2rem;
+    color: var(--color-700);
+    margin-bottom: 24px;
+}
+
+.create-note-button {
+    padding: 10px 20px;
+    background-color: var(--color-500);
+    color: #000;
+    font-size: 1.2rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.create-note-button:hover {
+    background-color: var(--color-600);
+}
+
+body.dark-mode .empty-notes-card h5 {
+    color: var(--section-title-dark);
+}
+
+body.dark-mode .empty-notes-card p {
+    color: var(--color-300);
+}
+
+body.dark-mode .create-note-button {
+    background-color: var(--color-400);
+    color: var(--bg-color-light);
+}
+
+body.dark-mode .create-note-button:hover {
+    background-color: var(--color-500);
 }
 
 .section-title {
