@@ -28,7 +28,7 @@
 }
 
 .w-md-editor-text-pre, .w-md-editor-text-input{
-    height: calc(80vh - 300px) !important;
+    height: calc(80vh - 250px) !important;
 }
 
 .w-md-editor-toolbar li > button{
@@ -38,7 +38,6 @@
 
 .w-md-editor-fullscreen{
     height: 100% !important;
-    
 }
 
 @media screen and (max-width: 480px){

@@ -51,7 +51,6 @@ const CreateNote = ({ open, onClose, onSave }) => {
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     InputLabelProps={{ style: { color: customColors.textColor } }}
-                    InputProps={{ style: { color: customColors.textColor } }}
                 />
                 <Box sx={{ flexGrow: 1, overflow: 'hidden', mt: 2 }}>
                     <MDEditor
@@ -70,7 +69,7 @@ const CreateNote = ({ open, onClose, onSave }) => {
                                 backgroundColor: c,
                                 borderRadius: '50%',
                                 cursor: 'pointer',
-                                border: color === c ? `2px solid ${customColors.textColor}` : '2px solid transparent',
+                                border: color === c ? `3px solid black` : '2px solid transparent',
                                 mr: 1
                             }}
                             onClick={() => setColor(c)}
@@ -78,9 +77,32 @@ const CreateNote = ({ open, onClose, onSave }) => {
                     ))}
                 </Box>
             </DialogContent>
-            <DialogActions>
-                <Button onClick={onClose} sx={{ color: customColors.textColor }}>Cancel</Button>
-                <Button onClick={handleSave} sx={{ color: customColors.buttonColor }}>Save</Button>
+            <DialogActions sx={{ padding: '16px' }}>
+                <Button
+                    onClick={onClose}
+                    sx={{
+                        color: customColors.textColor,
+                        backgroundColor: customColors.noteBackground,
+                        padding: '8px 16px',
+                        borderRadius: '12px',
+                        '&:hover': { backgroundColor: customColors.noteBackground, opacity: 0.8 },
+                    }}
+                >
+                    Cancel
+                </Button>
+                <Button
+                    onClick={handleSave}
+                    sx={{
+                        color: customColors.buttonColor,
+                        backgroundColor: customColors.actionButton,
+                        padding: '8px 20px',
+                        borderRadius: '12px',
+                        ml: 2,
+                        '&:hover': { backgroundColor: customColors.actionButton, opacity: 0.8 },
+                    }}
+                >
+                    Save
+                </Button>
             </DialogActions>
         </Dialog>
     );
