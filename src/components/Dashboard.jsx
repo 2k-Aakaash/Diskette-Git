@@ -6,7 +6,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Sidebar from './Sidebar';
 import menuDark from '../assets/menu-dark.svg';
 import menuLight from '../assets/menu-light.svg';
-import disketteIcon from '../assets/edit-icon.svg';
+import disketteIcon from '../assets/edit-icon2.svg';
 import { useTheme } from '../ThemeContext';
 
 const Dashboard = ({ notes, onCreateNote, onEditNote, onDeleteNote, onArchiveNote, onExportNote, onChangeColor, onUpdateNote }) => {
