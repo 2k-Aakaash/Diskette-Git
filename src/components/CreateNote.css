@@ -38,6 +38,7 @@
 
 .w-md-editor-fullscreen{
     height: 100% !important;
+    
 }
 
 @media screen and (max-width: 480px){
@@ -84,7 +85,10 @@
 @media (prefers-color-scheme: dark) {
     .wmde-markdown, .wmde-markdown-var {
         color-scheme: dark;
-        --color-accent-emphasis: #c838fd !important;
         --color-accent-fg: #c838fd !important;
     }
+}
+
+.css-1ch09h6-MuiInputBase-root-MuiInput-root::after {
+    border-bottom: 2px solid #c838fd !important;
 }

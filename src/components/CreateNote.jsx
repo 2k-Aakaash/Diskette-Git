@@ -11,8 +11,9 @@ const customColors = {
     actionButton: 'rgb(130, 54, 189)',
     iconColor: 'rgb(255, 255, 255)',
     modalBackground: '#390045',
-    buttonColor: 'rgb(130, 54, 189)',
-    textColor: 'rgb(255, 255, 255)',
+    buttonColor: '#fcf3ff',
+    textColor: 'rgb(184, 184, 184)',
+    bigTextColor: '#fff',
 };
 
 const colors = [
@@ -35,9 +36,9 @@ const CreateNote = ({ open, onClose, onSave }) => {
     };
 
     return (
-        <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth sx={{ '& .MuiDialog-paper': { backgroundColor: customColors.modalBackground, width: '90%', borderRadius: '20px', padding: '10px 4px 10px 4px' } }}>
+        <Dialog open={open} onClose={onClose} maxWidth="90%" fullWidth sx={{ '& .MuiDialog-paper': { backgroundColor: customColors.modalBackground, width: '100%', borderRadius: '20px', padding: '10px 4px 10px 4px' } }}>
             <DialogTitle sx={{
-                color: customColors.textColor, fontSize: '1.5rem', fontWeight: '700', padding: '10px 10px 10px 20px'
+                color: customColors.bigTextColor, fontSize: '1.5rem', fontWeight: '700', padding: '10px 10px 10px 20px'
             }}>Create Diskette</DialogTitle>
             <DialogContent sx={{ height: 'calc(100vh - 200px)', display: 'flex', flexDirection: 'column' }}>
                 <TextField
