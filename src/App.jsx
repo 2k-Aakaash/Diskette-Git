@@ -11,16 +11,16 @@ import BinSection from './components/Bin';
 import ExportNote from './components/ExportNote';
 import { auth, provider, signInWithPopup, signOut, db } from './firebaseConfig';
 import { onSnapshot, query, collection, where, addDoc, doc, updateDoc, deleteDoc, getDoc } from 'firebase/firestore';
-import { useTheme } from './ThemeContext'; // Import theme context
+import { useTheme } from './ThemeContext';
 
 const customColors = {
-  navbarBackground: 'rgb(68, 49, 102)', // Navbar background color
-  navbarText: 'rgb(255, 255, 255)', // Navbar text color
-  buttonCreate: 'rgb(130, 54, 189)', // Create note button color
-  buttonSignIn: 'rgb(130, 54, 189)', // Sign in button color
-  buttonSignOut: 'rgb(45, 36, 76)', // Sign out button color
-  noteBackground: 'rgb(68, 49, 102)', // Note background color
-  noteText: 'rgb(255, 255, 255)' // Note text color
+  navbarBackground: 'rgb(68, 49, 102)',
+  navbarText: 'rgb(255, 255, 255)',
+  buttonCreate: 'rgb(130, 54, 189)',
+  buttonSignIn: 'rgb(130, 54, 189)',
+  buttonSignOut: 'rgb(45, 36, 76)',
+  noteBackground: 'rgb(68, 49, 102)',
+  noteText: 'rgb(255, 255, 255)'
 };
 
 const App = () => {
@@ -216,9 +216,6 @@ const App = () => {
       }
     }
   };
-
-
-
 
   const handleRestoreNote = async (noteId) => {
     if (user) {

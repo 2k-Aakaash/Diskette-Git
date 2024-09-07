@@ -98,6 +98,7 @@ const Bin = ({ binNotes, setBinNotes, onUpdateNote }) => {
         const noteRef = doc(db, 'bin', noteId);
 
         try {
+            // Permanently delete the note from Firestore's 'bin' subcollection
             await deleteDoc(noteRef);
 
             // Update local state to remove deleted note

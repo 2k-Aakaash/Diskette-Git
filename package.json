@@ -1,7 +1,7 @@
 {
   "name": "Diskette",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1-alpha",
   "homepage": "https://2k-Aakaash.github.io/Diskette/",
   "type": "module",
   "scripts": {
