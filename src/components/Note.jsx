@@ -14,6 +14,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'; // New icon for permanent deletion
 import RestoreIcon from '@mui/icons-material/Restore'; // New icon for restoring note
 import './Note.css';
+// 
 
 const Note = ({ note, onEdit, onDelete, onArchive, onRestore, onPin, onExport, onPriorityToggle, isInBin }) => {
     const navigate = useNavigate();
