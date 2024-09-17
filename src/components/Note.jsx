@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDraggable } from '@dnd-kit/core';
 import Markdown from 'markdown-to-jsx';
 import moment from 'moment';
 import EditIcon from '@mui/icons-material/Edit';
@@ -14,18 +13,10 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever'; // New icon for permanent deletion
 import RestoreIcon from '@mui/icons-material/Restore'; // New icon for restoring note
 import './Note.css';
-// 
 
 const Note = ({ note, onEdit, onDelete, onArchive, onRestore, onPin, onExport, onPriorityToggle, isInBin }) => {
     const navigate = useNavigate();
     const [overlayVisible, setOverlayVisible] = useState(false);
-
-    const { attributes, listeners, setNodeRef, transform, transition } = useDraggable({
-        id: note.id,
-        activationConstraint: {
-            distance: { x: 15, y: 15 },
-        },
-    });
 
     const handleCardClick = () => {
         if (window.innerWidth > 600 && !isInBin) {
@@ -47,8 +38,6 @@ const Note = ({ note, onEdit, onDelete, onArchive, onRestore, onPin, onExport, o
     };
 
     const style = {
-        transform: transform ? `translate3d(${transform.x}px, ${transform.y}px, 0)` : undefined,
-        transition,
         backgroundColor: note.color,
     };
 
@@ -57,9 +46,6 @@ const Note = ({ note, onEdit, onDelete, onArchive, onRestore, onPin, onExport, o
             className="note-card"
             style={style}
             onClick={handleCardClick}
-            ref={setNodeRef}
-            {...listeners}
-            {...attributes}
             onMouseEnter={() => window.innerWidth >= 480 && setOverlayVisible(true)}
             onMouseLeave={() => window.innerWidth >= 480 && setOverlayVisible(false)}
         >

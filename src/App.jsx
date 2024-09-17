@@ -187,7 +187,7 @@ const App = () => {
         const noteDoc = await getDoc(noteRef);
 
         if (!noteDoc.exists()) {
-          console.error('Note does not exist.');
+          console.error('Note does not exist in main collection.');
           setLoading(false);
           return;
         }
@@ -199,9 +199,10 @@ const App = () => {
           ...noteData,
           deletedAt: new Date().toISOString(),
           userId: user.uid,
+          originalId: noteToDelete // Store the original ID for reference
         });
 
-        // Delete the note from the original collection
+        // Remove the note from the original collection
         await deleteDoc(noteRef);
 
         // Update local state
@@ -210,7 +211,7 @@ const App = () => {
         setNoteToDelete(null);
         setIsDeleteModalOpen(false);
       } catch (error) {
-        console.error('Error deleting note:', error);
+        console.error('Error moving note to bin:', error);
       } finally {
         setLoading(false);
       }

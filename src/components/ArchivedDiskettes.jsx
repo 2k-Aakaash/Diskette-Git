@@ -3,13 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 import '../index.css';
 import Note from './Note';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Sidebar from './Sidebar';
 import menuDark from '../assets/menu-dark.svg';
 import menuLight from '../assets/menu-light.svg';
 import { useTheme } from '../ThemeContext';
 
-// Your ArchivedDiskettes component code here
 const ArchivedDiskettes = ({ archivedNotes, onRestoreNote, onDeleteNote, onUpdateNote }) => {
     const [loading, setLoading] = useState(true);
     const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -40,22 +38,6 @@ const ArchivedDiskettes = ({ archivedNotes, onRestoreNote, onDeleteNote, onUpdat
         setSidebarOpen(!sidebarOpen);
     };
 
-    const handleDragEnd = async (result) => {
-        if (!result.destination) return;
-
-        const reorderedNotes = Array.from(archivedNotes);
-        const [removed] = reorderedNotes.splice(result.source.index, 1);
-        reorderedNotes.splice(result.destination.index, 0, removed);
-
-        try {
-            for (const note of reorderedNotes) {
-                await onUpdateNote(note.id, note);
-            }
-        } catch (error) {
-            console.error('Error updating archived notes:', error);
-        }
-    };
-
     const handleRestoreNote = async (noteId) => {
         try {
             const noteToRestore = archivedNotes.find(note => note.id === noteId);
@@ -65,8 +47,6 @@ const ArchivedDiskettes = ({ archivedNotes, onRestoreNote, onDeleteNote, onUpdat
             }
 
             await onUpdateNote(noteId, { ...noteToRestore, archived: false });
-
-            // Optionally: Remove the restored note from the archived notes list in the UI
         } catch (error) {
             console.error(`Error restoring note with ID ${noteId}:`, error);
         }
@@ -89,44 +69,24 @@ const ArchivedDiskettes = ({ archivedNotes, onRestoreNote, onDeleteNote, onUpdat
 
                             <h1 className="section-title">Archived Diskettes</h1>
                         </div>
-                        <DragDropContext onDragEnd={handleDragEnd}>
-                            <Droppable droppableId="archivedNotes">
-                                {(provided) => (
-                                    <div
-                                        className="notes-grid"
-                                        ref={provided.innerRef}
-                                        {...provided.droppableProps}
-                                    >
-                                        {archivedNotes.length === 0 ? (
-                                            <div className="empty-notes-container">
-                                                <div className="empty-notes-card centered-empty-message">
-                                                    <h5>No Archived Diskettes Found</h5>
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            archivedNotes.map((note, index) => (
-                                                <Draggable key={note.id} draggableId={note.id} index={index}>
-                                                    {(provided) => (
-                                                        <div
-                                                            ref={provided.innerRef}
-                                                            {...provided.draggableProps}
-                                                            {...provided.dragHandleProps}
-                                                        >
-                                                            <Note
-                                                                note={note}
-                                                                onDelete={onDeleteNote}
-                                                                onRestore={handleRestoreNote}
-                                                            />
-                                                        </div>
-                                                    )}
-                                                </Draggable>
-                                            ))
-                                        )}
-                                        {provided.placeholder}
+                        <div className="notes-grid">
+                            {archivedNotes.length === 0 ? (
+                                <div className="empty-notes-container">
+                                    <div className="empty-notes-card centered-empty-message">
+                                        <h5>No Archived Diskettes Found</h5>
                                     </div>
-                                )}
-                            </Droppable>
-                        </DragDropContext>
+                                </div>
+                            ) : (
+                                archivedNotes.map((note) => (
+                                    <Note
+                                        key={note.id}
+                                        note={note}
+                                        onDelete={onDeleteNote}
+                                        onRestore={handleRestoreNote}
+                                    />
+                                ))
+                            )}
+                        </div>
                     </>
                 )}
             </div>

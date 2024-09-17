@@ -3,13 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 import '../index.css';
 import Note from './Note';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Sidebar from './Sidebar';
 import menuDark from '../assets/menu-dark.svg';
 import menuLight from '../assets/menu-light.svg';
 import { useTheme } from '../ThemeContext';
 import { auth, db } from '../firebaseConfig';
-import { doc, deleteDoc, runTransaction, collection, addDoc } from 'firebase/firestore';
+import { doc, deleteDoc, runTransaction, collection, addDoc, getDoc } from 'firebase/firestore';
 
 const Bin = ({ binNotes, setBinNotes, onUpdateNote }) => {
     const [loading, setLoading] = useState(true);
@@ -20,7 +19,7 @@ const Bin = ({ binNotes, setBinNotes, onUpdateNote }) => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate a delay for loading state
+                await new Promise(resolve => setTimeout(resolve, 1000));
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching bin notes: ", error);
@@ -39,22 +38,6 @@ const Bin = ({ binNotes, setBinNotes, onUpdateNote }) => {
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
-    };
-
-    const handleDragEnd = async (result) => {
-        if (!result.destination) return;
-
-        const reorderedNotes = Array.from(binNotes);
-        const [removed] = reorderedNotes.splice(result.source.index, 1);
-        reorderedNotes.splice(result.destination.index, 0, removed);
-
-        try {
-            for (const note of reorderedNotes) {
-                await onUpdateNote(note.id, note);
-            }
-        } catch (error) {
-            console.error('Error updating bin notes:', error);
-        }
     };
 
     const handleRestoreNote = async (noteId) => {
@@ -78,13 +61,9 @@ const Bin = ({ binNotes, setBinNotes, onUpdateNote }) => {
                 const noteData = noteDoc.data();
                 const targetCollection = collection(db, 'notes');
 
-                // Add the note to 'notes' collection
                 await addDoc(targetCollection, noteData);
-
-                // Delete from 'bin'
                 transaction.delete(noteRef);
 
-                // Update local state to remove restored note
                 setBinNotes((prevBinNotes) => prevBinNotes.filter(note => note.id !== noteId));
             });
 
@@ -98,12 +77,16 @@ const Bin = ({ binNotes, setBinNotes, onUpdateNote }) => {
         const noteRef = doc(db, 'bin', noteId);
 
         try {
-            // Permanently delete the note from Firestore's 'bin' subcollection
+            const noteDoc = await getDoc(noteRef);
+
+            if (!noteDoc.exists()) {
+                console.error(`Note with ID ${noteId} does not exist in bin.`);
+                setBinNotes((prevBinNotes) => prevBinNotes.filter(note => note.id !== noteId));
+                return;
+            }
+
             await deleteDoc(noteRef);
-
-            // Update local state to remove deleted note
             setBinNotes((prevBinNotes) => prevBinNotes.filter(note => note.id !== noteId));
-
             console.log(`Note with ID ${noteId} deleted permanently.`);
         } catch (error) {
             console.error(`Error permanently deleting note with ID ${noteId}:`, error);
@@ -127,45 +110,25 @@ const Bin = ({ binNotes, setBinNotes, onUpdateNote }) => {
 
                             <h1 className="section-title">Bin</h1>
                         </div>
-                        <DragDropContext onDragEnd={handleDragEnd}>
-                            <Droppable droppableId="binNotes">
-                                {(provided) => (
-                                    <div
-                                        className="notes-grid"
-                                        ref={provided.innerRef}
-                                        {...provided.droppableProps}
-                                    >
-                                        {binNotes.length === 0 ? (
-                                            <div className="empty-notes-container">
-                                                <div className="empty-notes-card centered-empty-message">
-                                                    <h5>No Notes in Bin</h5>
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            binNotes.map((note, index) => (
-                                                <Draggable key={note.id} draggableId={note.id} index={index}>
-                                                    {(provided) => (
-                                                        <div
-                                                            ref={provided.innerRef}
-                                                            {...provided.draggableProps}
-                                                            {...provided.dragHandleProps}
-                                                        >
-                                                            <Note
-                                                                note={note}
-                                                                onDelete={handleDeletePermanently}
-                                                                onRestore={handleRestoreNote}
-                                                                isInBin={true}
-                                                            />
-                                                        </div>
-                                                    )}
-                                                </Draggable>
-                                            ))
-                                        )}
-                                        {provided.placeholder}
+                        <div className="notes-grid">
+                            {binNotes.length === 0 ? (
+                                <div className="empty-notes-container">
+                                    <div className="empty-notes-card centered-empty-message">
+                                        <h5>No Notes in Bin</h5>
                                     </div>
-                                )}
-                            </Droppable>
-                        </DragDropContext>
+                                </div>
+                            ) : (
+                                binNotes.map((note) => (
+                                    <Note
+                                        key={note.id}
+                                        note={note}
+                                        onDelete={handleDeletePermanently}
+                                        onRestore={handleRestoreNote}
+                                        isInBin={true}
+                                    />
+                                ))
+                            )}
+                        </div>
                     </>
                 )}
             </div>

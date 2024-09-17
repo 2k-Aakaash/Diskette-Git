@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './Dashboard.css';
 import '../index.css';
 import Note from './Note';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import Sidebar from './Sidebar';
 import menuDark from '../assets/menu-dark.svg';
 import menuLight from '../assets/menu-light.svg';
@@ -59,30 +58,17 @@ const Dashboard = ({ onCreateNote, onEditNote, onDeleteNote, onArchiveNote, onEx
 
         fetchUser();
 
+        // Disable body scroll and add scroll to main content
+        document.body.style.overflowY = 'hidden';
+
         return () => {
-            document.body.style.overflowY = 'auto';
+            document.body.style.overflowY = 'auto'; // Restore body scroll on cleanup
         };
     }, []);
 
     const activeNotes = notes.filter(note => !note.archived);
     const priorityNotes = activeNotes.filter(note => note.isPriority);
     const regularNotes = activeNotes.filter(note => !note.isPriority);
-
-    const handleDragEnd = async (result) => {
-        if (!result.destination) return;
-
-        const reorderedNotes = Array.from(activeNotes);
-        const [removed] = reorderedNotes.splice(result.source.index, 1);
-        reorderedNotes.splice(result.destination.index, 0, removed);
-
-        try {
-            for (const note of reorderedNotes) {
-                await onUpdateNote(note.id, note);
-            }
-        } catch (error) {
-            console.error('Error updating notes:', error);
-        }
-    };
 
     const handlePriorityToggle = async (noteId) => {
         const updatedNote = activeNotes.find(note => note.id === noteId);
@@ -135,67 +121,37 @@ const Dashboard = ({ onCreateNote, onEditNote, onDeleteNote, onArchiveNote, onEx
                                     </button>
                                     <h1 className="section-title priority-diskette">Priority Diskettes</h1>
                                 </div>
-                                <DragDropContext onDragEnd={handleDragEnd}>
-                                    <Droppable droppableId="priorityNotes" direction="horizontal">
-                                        {(provided) => (
-                                            <div className="notes-grid horizontal-scroll" ref={provided.innerRef} {...provided.droppableProps}>
-                                                {priorityNotes.map((note, index) => (
-                                                    <Draggable key={note.id} draggableId={note.id} index={index}>
-                                                        {(provided) => (
-                                                            <div
-                                                                ref={provided.innerRef}
-                                                                {...provided.draggableProps}
-                                                                {...provided.dragHandleProps}
-                                                            >
-                                                                <Note
-                                                                    note={note}
-                                                                    onEdit={onEditNote}
-                                                                    onDelete={onDeleteNote}
-                                                                    onArchive={onArchiveNote}
-                                                                    onExport={onExportNote}
-                                                                    onChangeColor={onChangeColor}
-                                                                    onPriorityToggle={handlePriorityToggle}
-                                                                />
-                                                            </div>
-                                                        )}
-                                                    </Draggable>
-                                                ))}
-                                                {provided.placeholder}
-                                            </div>
-                                        )}
-                                    </Droppable>
+                                <div className="notes-grid horizontal-scroll">
+                                    {priorityNotes.map((note) => (
+                                        <Note
+                                            key={note.id}
+                                            note={note}
+                                            onEdit={onEditNote}
+                                            onDelete={onDeleteNote}
+                                            onArchive={onArchiveNote}
+                                            onExport={onExportNote}
+                                            onChangeColor={onChangeColor}
+                                            onPriorityToggle={handlePriorityToggle}
+                                        />
+                                    ))}
+                                </div>
 
-                                    <h1 className="section-title">Diskettes</h1>
-                                    <Droppable droppableId="regularNotes">
-                                        {(provided) => (
-                                            <div className="notes-grid" ref={provided.innerRef} {...provided.droppableProps}>
-                                                {regularNotes.map((note, index) => (
-                                                    <Draggable key={note.id} draggableId={note.id} index={index}>
-                                                        {(provided) => (
-                                                            <div
-                                                                ref={provided.innerRef}
-                                                                {...provided.draggableProps}
-                                                                {...provided.dragHandleProps}
-                                                            >
-                                                                <Note
-                                                                    className={note.isPriority ? 'priority-note' : ''}
-                                                                    note={note}
-                                                                    onEdit={onEditNote}
-                                                                    onDelete={onDeleteNote}
-                                                                    onArchive={onArchiveNote}
-                                                                    onExport={onExportNote}
-                                                                    onChangeColor={onChangeColor}
-                                                                    onPriorityToggle={handlePriorityToggle}
-                                                                />
-                                                            </div>
-                                                        )}
-                                                    </Draggable>
-                                                ))}
-                                                {provided.placeholder}
-                                            </div>
-                                        )}
-                                    </Droppable>
-                                </DragDropContext>
+                                <h1 className="section-title">Diskettes</h1>
+                                <div className="notes-grid">
+                                    {regularNotes.map((note) => (
+                                        <Note
+                                            key={note.id}
+                                            className={note.isPriority ? 'priority-note' : ''}
+                                            note={note}
+                                            onEdit={onEditNote}
+                                            onDelete={onDeleteNote}
+                                            onArchive={onArchiveNote}
+                                            onExport={onExportNote}
+                                            onChangeColor={onChangeColor}
+                                            onPriorityToggle={handlePriorityToggle}
+                                        />
+                                    ))}
+                                </div>
                             </>
                         )}
                     </>
