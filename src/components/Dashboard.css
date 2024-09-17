@@ -60,17 +60,36 @@ body.dark-mode .section-title {
 @media (max-width: 480px) {
     .sidebar-open .main-content {
         transform: translateX(0) !important;
-        filter: blur(4px);
+        filter: blur(20px);
+        background-color: var(--color-1000);
+        -webkit-backface-visibility: hidden;
+        -webkit-perspective: 1000;
+        -webkit-transform: translate3d(0,0,0);
+        -webkit-transform: translateZ(0);
+        backface-visibility: hidden;
+        perspective: 1000;
+        transform: translate3d(0,0,0);
+        transform: translateZ(0);
     }
 
-    .overlay {
+    .overlay-background {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        background: transparent;
+        background: var(--color-1000); /* Adjust if needed */
         z-index: 2; /* Above everything but below the sidebar */
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: space-around;
+        padding: 5px 0;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
     }
 }
 

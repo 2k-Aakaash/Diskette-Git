@@ -106,7 +106,7 @@ const Dashboard = ({ onCreateNote, onEditNote, onDeleteNote, onArchiveNote, onEx
             <Sidebar open={sidebarOpen} />
 
             {/* Overlay when sidebar is open */}
-            {sidebarOpen && screenWidth < 480 && <div className="overlay" onClick={closeSidebar}></div>}
+            {sidebarOpen && screenWidth < 480 && <div className="overlay-background" onClick={closeSidebar}></div>}
 
             {/* Main Content */}
             <div className="main-content">
