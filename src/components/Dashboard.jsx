@@ -31,10 +31,10 @@ const Dashboard = ({ onCreateNote, onEditNote, onDeleteNote, onArchiveNote, onEx
             const unsubscribe = auth.onAuthStateChanged(async (currentUser) => {
                 if (currentUser) {
                     setUser(currentUser);
-                    fetchNotes(currentUser.uid);
+                    fetchNotes(currentUser.uid); // Fetch notes after user is authenticated
                 } else {
                     setUser(null);
-                    setLoading(false); // No need to load notes if no user is logged in
+                    setLoading(false); // Stop loading if there's no user
                 }
             });
 
@@ -42,7 +42,7 @@ const Dashboard = ({ onCreateNote, onEditNote, onDeleteNote, onArchiveNote, onEx
         };
 
         const fetchNotes = async (userId) => {
-            setLoading(true);
+            setLoading(true); // Start loading only when fetching notes
             try {
                 const q = query(collection(db, 'notes'), where('userId', '==', userId));
                 const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -51,18 +51,18 @@ const Dashboard = ({ onCreateNote, onEditNote, onDeleteNote, onArchiveNote, onEx
                         ...doc.data()
                     }));
                     setNotes(fetchedNotes);
-                    setLoading(false);
+                    setLoading(false); // Stop loading when notes are fetched
                 });
 
                 return () => unsubscribe();
             } catch (error) {
                 console.error('Error fetching notes: ', error);
-                setLoading(false);
+                setLoading(false); // Stop loading if there's an error
             }
         };
 
         fetchUser();
-    }, [sidebarOpen]);
+    }, []); // Removed sidebarOpen from dependencies
 
     // Update screen width state on window resize
     useEffect(() => {
