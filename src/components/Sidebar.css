@@ -69,7 +69,7 @@
 
 @media screen and (max-width: 480px) {
     .sidebar-container{
-        top: 105px;
-        height: calc(100dvh - 115px);
+        top: 75px;
+        height: calc(100dvh - 90px);
     }
 }

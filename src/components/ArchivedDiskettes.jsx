@@ -55,6 +55,7 @@ const ArchivedDiskettes = ({ archivedNotes, onRestoreNote, onDeleteNote, onUpdat
     return (
         <div className={`dashboard-container ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
             <Sidebar open={sidebarOpen} />
+            {sidebarOpen && <div className="overlay-background" onClick={toggleSidebar}></div>}
             <div className="main-content">
                 {loading ? (
                     <div className="loading-container">
