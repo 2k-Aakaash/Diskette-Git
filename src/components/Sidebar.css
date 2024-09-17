@@ -65,3 +65,10 @@
 .settings-button:hover {
     background-color: #E8A4FF; /* Hover color for settings button */
 }
+
+
+@media screen and (max-width: 480px) {
+    .sidebar-container{
+        top: 102px;
+    }
+}
