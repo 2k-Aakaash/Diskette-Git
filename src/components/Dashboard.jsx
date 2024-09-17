@@ -15,10 +15,15 @@ const Dashboard = ({ onCreateNote, onEditNote, onDeleteNote, onArchiveNote, onEx
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const [notes, setNotes] = useState([]);
     const [user, setUser] = useState(null);
+    const [screenWidth, setScreenWidth] = useState(window.innerWidth);
     const { mode } = useTheme();
 
     const toggleSidebar = () => {
         setSidebarOpen(!sidebarOpen);
+    };
+
+    const closeSidebar = () => {
+        setSidebarOpen(false);
     };
 
     useEffect(() => {
@@ -57,13 +62,13 @@ const Dashboard = ({ onCreateNote, onEditNote, onDeleteNote, onArchiveNote, onEx
         };
 
         fetchUser();
+    }, [sidebarOpen]);
 
-        // Disable body scroll and add scroll to main content
-        document.body.style.overflowY = 'hidden';
-
-        return () => {
-            document.body.style.overflowY = 'auto'; // Restore body scroll on cleanup
-        };
+    // Update screen width state on window resize
+    useEffect(() => {
+        const handleResize = () => setScreenWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
     }, []);
 
     const activeNotes = notes.filter(note => !note.archived);
@@ -96,8 +101,14 @@ const Dashboard = ({ onCreateNote, onEditNote, onDeleteNote, onArchiveNote, onEx
     }
 
     return (
-        <div className={`dashboard-container ${sidebarOpen ? 'sidebar-open' : 'sidebar-closed'}`}>
+        <div className={`dashboard-container ${sidebarOpen ? 'sidebar-open' : ''}`}>
+            {/* Sidebar */}
             <Sidebar open={sidebarOpen} />
+
+            {/* Overlay when sidebar is open */}
+            {sidebarOpen && screenWidth < 480 && <div className="overlay" onClick={closeSidebar}></div>}
+
+            {/* Main Content */}
             <div className="main-content">
                 {loading ? (
                     <div className="loading-container">
@@ -157,6 +168,8 @@ const Dashboard = ({ onCreateNote, onEditNote, onDeleteNote, onArchiveNote, onEx
                     </>
                 )}
             </div>
+
+            {/* Floating button for creating notes */}
             <button className="create-note-button-floating" onClick={onCreateNote}>
                 <img src={disketteIcon} alt="Create Diskette" style={{ width: '24px', height: '24px' }} />
                 <span>Create Diskette</span>

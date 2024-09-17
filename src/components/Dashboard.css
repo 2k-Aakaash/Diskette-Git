@@ -45,7 +45,7 @@ body.dark-mode .section-title {
 }
 
 .sidebar-open .sidebar-container {
-    transform: translateX(10px);
+    transform: translateX(0);
 }
 
 .sidebar-closed .sidebar-container {
@@ -56,6 +56,24 @@ body.dark-mode .section-title {
     margin-left: 250px; /* Adjust based on sidebar width */
     width: calc(100% - 250px); /* Adjust the width of main content when sidebar is open */
 }
+
+@media (max-width: 480px) {
+    .sidebar-open .main-content {
+        transform: translateX(0) !important;
+        filter: blur(4px);
+    }
+
+    .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        z-index: 2; /* Above everything but below the sidebar */
+    }
+}
+
 
 .sidebar-closed .main-content {
     margin-left: 0;
@@ -283,4 +301,17 @@ body.dark-mode .create-note-button:hover {
     display: flex;
     justify-content: left;
     margin-top: -25px;
+}
+
+/* Styles for mobile view (less than 480px) */
+@media (max-width: 480px) {
+    .sidebar-open .main-content {
+        transform: translateX(80%);
+        margin-left: 0; /* No margin on mobile */
+        width: 100%; /* Full width for main content */
+    }
+
+    .sidebar-mobile .main-content {
+        display: none; /* Hide main content when sidebar is open on mobile */
+    }
 }
