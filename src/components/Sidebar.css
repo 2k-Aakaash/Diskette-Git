@@ -1,0 +1,75 @@
+.sidebar-container {
+    position: fixed;
+    top: 90px; /* Adjust based on navbar height */
+    left: 0; /* Start at the edge of the viewport */
+    width: 240px; /* Increased width */
+    height: calc(100dvh - 100px); /* Adjusted height to use viewport height */
+    background-color: #F7E6FF; /* Matches background from design */
+    border-radius: 12px; /* Rounded corners */
+    padding: 16px; /* Add padding around content */
+    transform: translateX(-260px); /* Completely hide the sidebar off-screen */
+    transition: transform 0.5s cubic-bezier(1, 0, 0, 1);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Ensure the content and footer are spaced out */
+}
+
+.sidebar-container.open {
+    transform: translateX(10px); /* Bring the sidebar into view */
+}
+
+.sidebar-content {
+    padding: 8px 0;
+}
+
+.sidebar-item {
+    background-color: #F0CCFF; /* Default button background color */
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 12px; /* Button rounded corners */
+    display: flex;
+    align-items: center;
+    width: 100%; /* Ensure full width */
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.sidebar-item:hover,
+.sidebar-item.active { /* Apply the hover and active state */
+    background-color: #E8A4FF;
+}
+
+.icon {
+    color: #440054; /* Icon color */
+    margin-right: 16px;
+    width: 20px; /* Adjust icon size */
+}
+
+.text {
+    color: #440054; /* Text color */
+    font-weight: bold;
+}
+
+.settings-button {
+    background-color: #F0CCFF; /* Default settings button background */
+    padding: 10px;
+    border-radius: 12px; /* Rounded corners */
+    display: flex;
+    align-items: center;
+    width: 100%; /* Ensure full width */
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+}
+
+.settings-button:hover {
+    background-color: #E8A4FF; /* Hover color for settings button */
+}
+
+
+@media screen and (max-width: 480px) {
+    .sidebar-container{
+        top: 75px;
+        height: calc(100dvh - 90px);
+    }
+}

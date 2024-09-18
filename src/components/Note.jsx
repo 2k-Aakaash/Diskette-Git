@@ -1,119 +1,110 @@
-// src/components/Note.jsx
 import React, { useState } from 'react';
-import { Card, CardContent, Typography, Box, IconButton } from '@mui/material';
-import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import Markdown from 'markdown-to-jsx';
+import moment from 'moment';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArchiveIcon from '@mui/icons-material/Archive';
+import UnarchiveIcon from '@mui/icons-material/Unarchive';
 import PushPinIcon from '@mui/icons-material/PushPin';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
-import PaletteIcon from '@mui/icons-material/Palette';
+import StarIcon from '@mui/icons-material/Star';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import moment from 'moment';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever'; // New icon for permanent deletion
+import RestoreIcon from '@mui/icons-material/Restore'; // New icon for restoring note
+import './Note.css';
 
-const NoteCard = styled(Card)(({ theme, bgcolor }) => ({
-    background: `linear-gradient(180deg, ${bgcolor} 0%, ${bgcolor} 70%, ${theme.palette.mode === 'light' ? 'rgba(255,255,255,0)' : 'rgba(0,0,0,0)'} 100%)`,
-    cursor: 'pointer',
-    borderRadius: '10px',
-    marginBottom: theme.spacing(2),
-    position: 'relative',
-    transition: 'background 0.3s ease-in-out',
-    '&:hover .overlay': {
-        opacity: 1,
-    },
-    [theme.breakpoints.down('sm')]: {
-        '&:hover .overlay': {
-            opacity: 0,
-        },
-    }
-}));
-
-const Overlay = styled(Box)(({ theme }) => ({
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    background: 'rgba(0, 0, 0, 0.5)',
-    display: 'flex',
-    justifyContent: 'space-around',
-    opacity: 0,
-    transition: 'opacity 0.3s ease-in-out',
-    '&.visible': {
-        opacity: 1,
-    },
-}));
-
-const Timestamp = styled(Box)(({ theme }) => ({
-    position: 'absolute',
-    bottom: theme.spacing(1),
-    right: theme.spacing(1),
-    backgroundColor: theme.palette.mode === 'light' ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)',
-    padding: '2px 5px',
-    borderRadius: '4px',
-    color: theme.palette.text.primary,
-}));
-
-const MoreOptionsIcon = styled(IconButton)(({ theme }) => ({
-    position: 'absolute',
-    top: theme.spacing(1),
-    right: theme.spacing(1),
-    zIndex: 1,
-    [theme.breakpoints.up('sm')]: {
-        display: 'none',
-    },
-}));
-
-const Note = ({ note, onEdit, onDelete, onArchive, onPin, onExport, onChangeColor }) => {
+const Note = ({ note, onEdit, onDelete, onArchive, onRestore, onPin, onExport, onPriorityToggle, isInBin }) => {
     const navigate = useNavigate();
     const [overlayVisible, setOverlayVisible] = useState(false);
 
     const handleCardClick = () => {
-        if (window.innerWidth > 600) {
+        if (window.innerWidth > 600 && !isInBin) {
             navigate(`/note/${note.id}`);
         }
     };
 
     const toggleOverlayVisibility = (event) => {
-        event.stopPropagation(); // Prevent triggering handleCardClick
+        event.stopPropagation();
         setOverlayVisible(!overlayVisible);
     };
 
+    const handleArchiveOrRestore = () => {
+        if (onRestore) {
+            onRestore(note.id);
+        } else if (onArchive) {
+            onArchive(note.id);
+        }
+    };
+
+    const style = {
+        backgroundColor: note.color,
+    };
+
     return (
-        <NoteCard bgcolor={note.color} onClick={handleCardClick}>
-            <CardContent>
-                <Typography variant="h5" component="div" fontWeight="bold" sx={{ color: '#000' }}>
-                    {note.title}
-                </Typography>
-                <Box
-                    sx={{
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        display: '-webkit-box',
-                        WebkitBoxOrient: 'vertical',
-                        WebkitLineClamp: 4
-                    }}
-                >
+        <div
+            className="note-card"
+            style={style}
+            onClick={handleCardClick}
+            onMouseEnter={() => window.innerWidth >= 480 && setOverlayVisible(true)}
+            onMouseLeave={() => window.innerWidth >= 480 && setOverlayVisible(false)}
+        >
+            <div className="card-content">
+                <h1 className="note-title">{note.title}</h1>
+                <div className="note-text">
                     <Markdown>{note.content}</Markdown>
-                </Box>
-            </CardContent>
-            <Timestamp>
-                <Typography variant="caption" color="textSecondary">
-                    Updated: {moment(note.updatedAt).isValid() ? moment(note.updatedAt).format('MMM DD, YYYY hh:mm A') : 'Invalid Date'}
-                </Typography>
-            </Timestamp>
-            <Overlay className={`overlay ${overlayVisible ? 'visible' : ''}`} onClick={(event) => event.stopPropagation()}>
-                <IconButton onClick={() => onEdit(note.id)}><EditIcon /></IconButton>
-                <IconButton onClick={() => onDelete(note.id)}><DeleteIcon /></IconButton>
-                <IconButton onClick={() => onArchive(note.id)}><ArchiveIcon /></IconButton>
-                <IconButton onClick={() => onPin(note.id)}><PushPinIcon /></IconButton>
-                <IconButton onClick={() => onExport(note.id)}><FileDownloadIcon /></IconButton>
-                <IconButton onClick={() => onChangeColor(note.id)}><PaletteIcon /></IconButton>
-            </Overlay>
-            <MoreOptionsIcon onClick={toggleOverlayVisibility}>
-                <MoreVertIcon />
-            </MoreOptionsIcon>
-        </NoteCard>
+                </div>
+            </div>
+            <div className="timestamp">
+                <span>Updated: {moment(note.updatedAt).isValid() ? moment(note.updatedAt).format('MMM DD, YYYY hh:mm A') : 'Invalid Date'}</span>
+            </div>
+            {window.innerWidth >= 480 ? (
+                <div className={`overlay ${overlayVisible ? 'visible' : ''}`} onClick={(event) => event.stopPropagation()}>
+                    {isInBin ? (
+                        <>
+                            <button onClick={() => onRestore(note.id)}><RestoreIcon /></button>
+                            <button onClick={() => onDelete(note.id)}><DeleteForeverIcon /></button>
+                        </>
+                    ) : (
+                        <>
+                            <button onClick={() => onEdit(note.id)}><EditIcon /></button>
+                            <button onClick={() => onDelete(note.id)}><DeleteIcon /></button>
+                            <button onClick={handleArchiveOrRestore}>
+                                {onRestore ? <UnarchiveIcon /> : <ArchiveIcon />}
+                            </button>
+                            <button onClick={() => onExport(note.id)}><FileDownloadIcon /></button>
+                            <button onClick={() => onPriorityToggle(note.id)}><StarIcon /></button>
+                        </>
+                    )}
+                </div>
+            ) : (
+                <>
+                    <button className="more-options" onClick={toggleOverlayVisibility}>
+                        <MoreVertIcon />
+                    </button>
+                    {overlayVisible && (
+                        <div className="overlay" onClick={(event) => event.stopPropagation()}>
+                            {isInBin ? (
+                                <>
+                                    <button onClick={() => onRestore(note.id)}><RestoreIcon /></button>
+                                    <button onClick={() => onDelete(note.id)}><DeleteForeverIcon /></button>
+                                </>
+                            ) : (
+                                <>
+                                    <button onClick={() => onEdit(note.id)}><EditIcon /></button>
+                                    <button onClick={() => onDelete(note.id)}><DeleteIcon /></button>
+                                    <button onClick={handleArchiveOrRestore}>
+                                        {onRestore ? <UnarchiveIcon /> : <ArchiveIcon />}
+                                    </button>
+                                    <button onClick={() => onExport(note.id)}><FileDownloadIcon /></button>
+                                    <button onClick={() => onPriorityToggle(note.id)}><StarIcon /></button>
+                                </>
+                            )}
+                        </div>
+                    )}
+                </>
+            )}
+        </div>
     );
 };
 

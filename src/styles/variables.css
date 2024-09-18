@@ -1,0 +1,14 @@
+/* variables.css */
+:root {
+  /* Light mode colors */
+  --navbar-bg-light: rgb(226, 148, 255);
+  --sidebar-bg-light: #add_light_color_here;
+  --dashboard-bg-light: #add_light_color_here;
+  --text-color-light: #add_light_color_here;
+
+  /* Dark mode colors */
+  --navbar-bg-dark: rgb(130, 54, 189);
+  --sidebar-bg-dark: #add_dark_color_here;
+  --dashboard-bg-dark: #add_dark_color_here;
+  --text-color-dark: #add_dark_color_here;
+}

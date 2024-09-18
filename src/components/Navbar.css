@@ -1,0 +1,49 @@
+.css-s37jdl-MuiPaper-root-MuiAppBar-root{
+    width: 95%;
+}
+
+@media screen and (max-width: 480px){
+    .css-s37jdl-MuiPaper-root-MuiAppBar-root{
+        width: 90%;
+    }
+}
+
+@media screen and (min-width: 600px) {
+    .css-jb236k-MuiInputBase-root{
+        width: 100ch !important;
+    }    
+
+    .css-rzpqfg-MuiInputBase-root{
+        width: 100ch !important;
+    }
+
+    .css-93r5td{
+        width: 100ch !important;
+    }
+    
+    .css-6wh8lg{
+        width: 100ch !important;
+    }
+}
+
+.css-jb236k-MuiInputBase-root{
+    width: 100ch;
+}  
+
+.css-rzpqfg-MuiInputBase-root{
+    width: 100ch;
+}
+
+.css-93r5td{
+    width: 100ch;
+}
+
+.css-6wh8lg{
+    width: 100ch;
+}
+
+@media screen and (max-width: 480px){
+    .css-jb236k-MuiInputBase-root{
+        width: calc(20ch + 10px) !important;
+    }
+}

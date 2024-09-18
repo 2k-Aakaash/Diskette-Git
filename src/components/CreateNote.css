@@ -1,0 +1,91 @@
+/* src/components/CreateNote.css */
+
+/* Custom styles for the color picker boxes */
+.color-picker-box {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    transition: border 0.3s ease-in-out;
+}
+
+.color-picker-box.selected {
+    border: 2px solid var(--text-color, #FFFFFF);
+}
+
+.dialog-paper {
+    background-color: var(--modal-bg-color, #1D1935);
+    width: 90% !important;
+    height: 90% !important;
+}
+
+.w-md-editor {
+    height: calc(100vh - 300px) !important;
+    overflow: auto;
+    font-family: var(--md-editor-font-family) !important;;
+}
+
+.w-md-editor-text-pre, .w-md-editor-text-input{
+    height: calc(80vh - 250px) !important;
+}
+
+.w-md-editor-toolbar li > button{
+    scale: 1.5;
+    margin: 10px;
+}
+
+.w-md-editor-fullscreen{
+    height: 100% !important;
+}
+
+@media screen and (max-width: 480px){
+    .w-md-editor-toolbar li > button{
+        scale: 0.8;
+        margin: 0px;
+    }
+}
+
+.create-note-button-floating {
+    position: fixed;
+    z-index: 1;
+    bottom: 16px;
+    right: 16px;
+    background-color: #68127d;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    width: 200px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    transition: all 0.3s ease-in-out;
+}
+
+.create-note-button-floating:hover{
+    box-shadow: 0 2px 20px rgba(254, 254, 254, 0.4);
+}
+
+.create-note-button-floating img {
+    width: 20px;
+    height: 20px;
+    margin-right: 14px;
+}
+
+@media (prefers-color-scheme: dark) {
+    .wmde-markdown, .wmde-markdown-var {
+        color-scheme: dark;
+        --color-accent-fg: #c838fd !important;
+    }
+}
+
+.css-1ch09h6-MuiInputBase-root-MuiInput-root::after {
+    border-bottom: 2px solid #c838fd !important;
+}
