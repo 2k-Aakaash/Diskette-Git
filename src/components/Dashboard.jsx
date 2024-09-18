@@ -7,7 +7,7 @@ import menuDark from '../assets/menu-dark.svg';
 import menuLight from '../assets/menu-light.svg';
 import disketteIcon from '../assets/edit-icon2.svg';
 import { useTheme } from '../ThemeContext';
-import { auth, db } from '../firebaseConfig';
+import { auth, db, provider, signInWithPopup } from '../firebaseConfig';
 import { onSnapshot, collection, where, query } from 'firebase/firestore';
 
 const Dashboard = ({ onCreateNote, onEditNote, onDeleteNote, onArchiveNote, onExportNote, onChangeColor, onUpdateNote }) => {
@@ -88,13 +88,22 @@ const Dashboard = ({ onCreateNote, onEditNote, onDeleteNote, onArchiveNote, onEx
         }
     };
 
+    // Function for handling sign-in with Google (from ProfileModal)
+    const handleSignIn = async () => {
+        try {
+            await signInWithPopup(auth, provider);
+        } catch (error) {
+            console.error('Error signing in:', error);
+        }
+    };
+
     if (!user) {
         return (
             <div className="empty-notes-container">
                 <div className="empty-notes-card centered-empty-message">
                     <h5>Welcome to Diskette!</h5>
                     <p>Log in to save your notes securely and access them from any device.</p>
-                    <button className="create-note-button" onClick={() => auth.signIn()}>Log In</button>
+                    <button className="create-note-button" onClick={handleSignIn}>Log In</button> {/* Use handleSignIn */}
                 </div>
             </div>
         );
